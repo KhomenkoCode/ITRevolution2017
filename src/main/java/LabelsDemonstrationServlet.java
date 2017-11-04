@@ -32,53 +32,49 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 			String project = request.getParameter("project");
 			IssuesLabel[] labels = GithubAPI.getAllLabels(project);
 			Map<String, Vector<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
-			
-			
+
 			request.setAttribute("project", request.getParameter("project"));
-			
-			
-			if (request.getParameter("type") != null){
+
+			if (request.getParameter("type") != null) {
 				String choosedType = request.getParameter("type");
-				
-				if(labelsByTypeMap.get(choosedType)==null)
-				{
+
+				if (labelsByTypeMap.get(choosedType) == null) {
 					String labelForIssuesPage = "";
-					for(int i=0; i< labels.length;i++){
-						if(labels[i]!=null)
-							if(labels[i].getName().lastIndexOf(choosedType) != -1)
+					for (int i = 0; i < labels.length; i++) {
+						if (labels[i] != null)
+							if (labels[i].getName().lastIndexOf(choosedType) != -1)
 								labelForIssuesPage = labels[i].getName();
 					}
-					
-					if(labelForIssuesPage == "")
+
+					if (labelForIssuesPage == "")
 						response.sendRedirect("index");
-					else 
-						response.sendRedirect("issues?project="+project+"&label="+labelForIssuesPage); 
+					else
+						response.sendRedirect("issues?project=" + project + "&label=" + labelForIssuesPage);
 					return;
 				}
-				
-				if(request.getParameter("subtype") != null)
-				{
+
+				if (request.getParameter("subtype") != null) {
 					String choosedSubtype = request.getParameter("subtype");
 					String labelForIssuesPage = "";
-					for(int i=0; i< labels.length;i++){
-						if(labels[i]!=null)
-							if(labels[i].getName().lastIndexOf(choosedType) != -1 && labels[i].getName().lastIndexOf(choosedSubtype) != -1)
+					for (int i = 0; i < labels.length; i++) {
+						if (labels[i] != null)
+							if (labels[i].getName().lastIndexOf(choosedType) != -1
+									&& labels[i].getName().lastIndexOf(choosedSubtype) != -1)
 								labelForIssuesPage = labels[i].getName();
 					}
-					
-					if(labelForIssuesPage == "")
+
+					if (labelForIssuesPage == "")
 						response.sendRedirect("index");
-					else 
-						response.sendRedirect("issues?project="+project+"&label="+labelForIssuesPage); 
+					else
+						response.sendRedirect("issues?project=" + project + "&label=" + labelForIssuesPage);
 					return;
 				}
-				
+
+				request.setAttribute("typeLabels", labelsByTypeMap);
 				request.setAttribute("choosedType", choosedType);
 				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
-			}
-			else request.setAttribute("typeLabels", labelsByTypeMap);
-			
-				
+			} 
+
 			response.setContentType("text/html");
 			RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/LabelsInfo.jsp");
 			dispatcher.forward(request, response);

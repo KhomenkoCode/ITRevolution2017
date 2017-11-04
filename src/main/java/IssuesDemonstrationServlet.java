@@ -20,17 +20,22 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		if (request.getParameter("project") == null || request.getParameter("label") == null){
+			response.sendRedirect("index");
+			return;
+		}
 		String choosedLabel = request.getParameter("label");
 		String project = request.getParameter("project");
 		String page = request.getParameter("page");
 		Issue[] pageOfIssues = null;
 
-		request.setAttribute("page", page);
+		
 
 		if (page == null)
 			page = "1";
 
-		
+		request.setAttribute("page", page);
 		pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all");
 		
 		request.setAttribute("hasNext", GithubAPI.hasNextPage(project, choosedLabel, page, "all"));

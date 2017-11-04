@@ -15,13 +15,16 @@ import com.google.gson.annotations.SerializedName;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Issue {
-	@SerializedName("labels_url")
-	String labels_url;
+	@SerializedName("number")
+	String number;
 	@SerializedName("comments_url")
 	String comments_url;
 	@SerializedName("user")
 	User user;
 
+	@SerializedName("labels")
+	IssuesLabel[] labels;
+	
 	@SerializedName("state")
 	String state;
 	@SerializedName("created_at")
@@ -41,6 +44,10 @@ public class Issue {
 	public int daysBetween;
 	public boolean isProblemOccurred = false;
 
+	
+	
+
+	
 	void calculateTime() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -60,6 +67,14 @@ public class Issue {
 				this.closed_at_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 	}
 
+	public IssuesLabel[] getLabels() {
+		return labels;
+	}
+
+	public void setLabels(IssuesLabel[] labels) {
+		this.labels = labels;
+	}
+	
 	public User getUser() {
 		return user;
 	}
@@ -80,12 +95,14 @@ public class Issue {
 		return closed_at_date;
 	}
 
-	public String getLabels_url() {
-		return labels_url;
+	
+
+	public String getNumber() {
+		return number;
 	}
 
-	public void setLabels_url(String labels_url) {
-		this.labels_url = labels_url;
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 	public String getState() {

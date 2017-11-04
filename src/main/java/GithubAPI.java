@@ -35,9 +35,9 @@ public abstract class GithubAPI {
 				if ((line = rd.readLine()) != null) {
 					sb.append(line.substring(1, line.length() - 1));
 				}
-				
+
 				header = conn.getHeaderField("Link");
-				if(header.lastIndexOf("rel=\"next\"") != -1)
+				if (header.lastIndexOf("rel=\"next\"") != -1)
 					sb.append(",");
 				++page;
 			} while (header.lastIndexOf("rel=\"next\"") != -1);
@@ -64,19 +64,19 @@ public abstract class GithubAPI {
 
 		try {
 			// issues?labels=Type:%20bug&state=all&per_page=100
-			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
-					"&state="+state+"&per_page=50&page="+page;
+			String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
+					+ "&per_page=50&page=" + page;
 			urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
-			
+
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			
+
 			if ((line = rd.readLine()) != null) {
 				sb.append(line);
 			}
-			
+
 			rd.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,8 +84,8 @@ public abstract class GithubAPI {
 
 		return gson.fromJson(sb.toString(), Issue[].class);
 	}
-	
-	private static boolean findWordInLinkHeader(String urlString, String word){
+
+	private static boolean findWordInLinkHeader(String urlString, String word) {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
@@ -94,7 +94,7 @@ public abstract class GithubAPI {
 			url = new URL(urlString);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
-			
+
 			header = conn.getHeaderField("Link");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -103,31 +103,29 @@ public abstract class GithubAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(header!=null)
-			if(header.lastIndexOf(word) !=-1)
+		if (header != null)
+			if (header.lastIndexOf(word) != -1)
 				return true;
 		return false;
-		
+
 	}
-	
-	public static boolean hasNextPage(String project, String label, String page, String state)
-	{
-		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
-				"&state="+state+"&per_page=50&page="+page;
+
+	public static boolean hasNextPage(String project, String label, String page, String state) {
+		String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
+				+ "&per_page=50&page=" + page;
 		urlString = urlString.replaceAll(" ", "%20");
-		
-		return findWordInLinkHeader(urlString, "rel=\"next\"");	
+
+		return findWordInLinkHeader(urlString, "rel=\"next\"");
 	}
-	
-	public static boolean hasPrevPage(String project, String label, String page, String state)
-	{
-		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
-				"&state="+state+"&per_page=50&page="+page;
+
+	public static boolean hasPrevPage(String project, String label, String page, String state) {
+		String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
+				+ "&per_page=50&page=" + page;
 		urlString = urlString.replaceAll(" ", "%20");
 		System.out.println(urlString);
-		return findWordInLinkHeader(urlString, "rel=\"prev\"");	
+		return findWordInLinkHeader(urlString, "rel=\"prev\"");
 	}
-	
+
 	public static Map<String, Vector<String>> parseLabelsNames(IssuesLabel[] labels) {
 		Map<String, Vector<String>> result = new HashMap<String, Vector<String>>();
 		String labelType;
@@ -154,4 +152,31 @@ public abstract class GithubAPI {
 		return result;
 	}
 
+	public static Issue getSingleIssueByNum(String project, String number) {
+		Gson gson = new Gson();
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+		String line;
+		try {
+			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number;
+			urlString = urlString.replaceAll(" ", "%20");
+			url = new URL(urlString);
+
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			if ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+
+			rd.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.fromJson(sb.toString(), Issue.class);
+	}
 }
