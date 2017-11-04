@@ -1,6 +1,8 @@
 package main.java;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,16 +17,24 @@ public class IssuesDemonstrationServlet extends HttpServlet {
  
     public IssuesDemonstrationServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String choosedLabel = request.getParameter("label");
+		String project = request.getParameter("project");
+		
+		Issue[] pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, 1, "all");
+		
+		request.setAttribute("project", project);
+		request.setAttribute("label", choosedLabel);
+		request.setAttribute("issues", pageOfIssues);
+		response.setContentType("text/html");
+		RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/IssuesInfo.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		doGet(request, response);
 	}
 

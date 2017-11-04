@@ -11,6 +11,7 @@ import java.util.Vector;
 import com.google.gson.Gson;
 
 public class GithubAPI {
+
 	public static IssuesLabel[] getAllLabels(String project) {
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
@@ -48,6 +49,38 @@ public class GithubAPI {
 		return labels;
 	}
 
+	public static Issue[] getPageOfIssues(String project, String label, int page, String state) {
+
+		Gson gson = new Gson();
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+		String line;
+
+		try {
+			// issues?labels=Type:%20bug&state=all&per_page=100
+			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
+					"&state="+state+"&per_page=50";
+			urlString = urlString.replaceAll(" ", "%20");
+			url = new URL(urlString);
+			
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			if ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			rd.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.fromJson(sb.toString(), Issue[].class);
+	}
+
 	public static Map<String, Vector<String>> parseLabelsNames(IssuesLabel[] labels) {
 		Map<String, Vector<String>> result = new HashMap<String, Vector<String>>();
 		String labelType;
@@ -62,8 +95,8 @@ public class GithubAPI {
 					for (int j = 0; j < labels.length; j++)
 						if (labels[j] != null)
 							if (labels[j].getName().lastIndexOf(labelType.substring(0, lastindexOfÑolon)) != -1)
-								Subtypes.add(
-										labels[j].getName().substring(lastindexOfÑolon + 1, labels[j].name.length()).trim());
+								Subtypes.add(labels[j].getName()
+										.substring(lastindexOfÑolon + 1, labels[j].name.length()).trim());
 					result.put(labelType.substring(0, lastindexOfÑolon), Subtypes);
 				} else
 					result.put(labelType, null);
@@ -73,4 +106,5 @@ public class GithubAPI {
 
 		return result;
 	}
+
 }
