@@ -26,9 +26,10 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("project") == null)
+		if (request.getParameter("project") == null) {
 			response.sendRedirect("index");
-		else {
+			return;
+		} else {
 			String project = request.getParameter("project");
 			IssuesLabel[] labels = GithubAPI.getAllLabels(project);
 			Map<String, Vector<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
@@ -70,10 +71,10 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 					return;
 				}
 
-				request.setAttribute("typeLabels", labelsByTypeMap);
 				request.setAttribute("choosedType", choosedType);
 				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
-			} 
+			} else
+				request.setAttribute("typeLabels", labelsByTypeMap);
 
 			response.setContentType("text/html");
 			RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/LabelsInfo.jsp");

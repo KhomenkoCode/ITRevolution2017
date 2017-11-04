@@ -20,7 +20,11 @@ Next
 </c:if>
 <br>
 	<c:forEach var="issue" items="${issues}">
-		 ${issue.getTitle()} <br>
+		 <a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a> Labels:
+		<c:forEach var="label" items="${issue.getLabels()}">
+			${label.getName()}
+		</c:forEach> 
+		 <br>
 	</c:forEach>
 	
 	
