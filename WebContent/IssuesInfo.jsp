@@ -8,8 +8,9 @@
 <title>Issues</title>
 </head>
 <body>
-	<c:forEach var="issue" items="${pageOfIssues}">
-		 ${issue.body} ${issue.getUser().getLogin()} <br>
+asdasasdd
+	<c:forEach var="issue" items="${issues}">
+		 ${issue.getTitle()} <br>
 	</c:forEach>
 	
 	
