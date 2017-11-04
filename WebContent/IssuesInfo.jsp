@@ -8,7 +8,6 @@
 <title>Issues</title>
 </head>
 <body>
-asdasasdd
 	<c:forEach var="issue" items="${issues}">
 		 ${issue.getTitle()} <br>
 	</c:forEach>

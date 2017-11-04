@@ -28,14 +28,15 @@ public class EntryFormServlet extends HttpServlet {
 
 		String projectUrl = (String) request.getParameter("project");
 		int lastIndexOfGithubCom = projectUrl.lastIndexOf("github.com/");
-		System.out.println(lastIndexOfGithubCom);
 		if (lastIndexOfGithubCom == -1) {
 			request.setAttribute("WrongUrlMessage", "Wrong URL! URL Must contain \"github.com/\"");
 			doGet(request, response);
 		} else {
 			String projectCuttedUrl = projectUrl.substring(lastIndexOfGithubCom + 11, projectUrl.length());
+			if(projectCuttedUrl.trim().charAt(projectCuttedUrl.length()-1) == '/')
+				projectCuttedUrl=projectCuttedUrl.trim().substring(0,projectCuttedUrl.length()-1);
+				
 			response.sendRedirect("labels?project=" + projectCuttedUrl);
 		}
 	}
-
 }

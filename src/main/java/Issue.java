@@ -17,6 +17,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class Issue {
 	@SerializedName("labels_url")
 	String labels_url;
+	@SerializedName("comments_url")
+	String comments_url;
 	@SerializedName("user")
 	User user;
 

@@ -22,9 +22,20 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String choosedLabel = request.getParameter("label");
 		String project = request.getParameter("project");
+		String page = request.getParameter("page");
+		Issue[] pageOfIssues = null;
 
-		Issue[] pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, 1, "all");
-
+		request.setAttribute("page", page);
+		
+		if(page==null || page=="1")
+		{
+			pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, "1", "all");
+		}
+		else{
+			pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all");
+		}
+			
+		
 		request.setAttribute("project", project);
 		request.setAttribute("label", choosedLabel);
 		request.setAttribute("issues", pageOfIssues);
@@ -39,21 +50,4 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private Vector<Vector<String>> prepareIssuesToDisplay(Issue[] issues) {
-		Vector<Vector<String>> result = new Vector<Vector<String>>();
-
-		for (int i = 0; i < issues.length; i++) {
-			if (issues[i] != null) {
-				Vector<String> var = new Vector<String>();
-				var.addElement(issues[i].getUser().getLogin());
-				var.addElement(issues[i].getTitle());
-				var.addElement(issues[i].getState());
-				var.addElement(issues[i].getCreated_at());
-				var.addElement(issues[i].getClosed_at());
-				result.add(var);
-			}
-		}
-
-		return result;
-	}
 }
