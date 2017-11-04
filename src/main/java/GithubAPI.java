@@ -84,16 +84,12 @@ public abstract class GithubAPI {
 
 		return gson.fromJson(sb.toString(), Issue[].class);
 	}
-
-	public static boolean hasNextPage(String project, String label, String page, String state)
-	{
+	
+	private static boolean findWordInLinkHeader(String urlString, String word){
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
 		String header = "";
-		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
-				"&state="+state+"&per_page=50&page="+page;
-		urlString = urlString.replaceAll(" ", "%20");
 		try {
 			url = new URL(urlString);
 			conn = (HttpURLConnection) url.openConnection();
@@ -107,11 +103,29 @@ public abstract class GithubAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		if(header.lastIndexOf("rel=\"next\"") !=-1)
-			return true;
+		if(header!=null)
+			if(header.lastIndexOf(word) !=-1)
+				return true;
 		return false;
+		
+	}
+	
+	public static boolean hasNextPage(String project, String label, String page, String state)
+	{
+		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
+				"&state="+state+"&per_page=50&page="+page;
+		urlString = urlString.replaceAll(" ", "%20");
+		
+		return findWordInLinkHeader(urlString, "rel=\"next\"");	
+	}
+	
+	public static boolean hasPrevPage(String project, String label, String page, String state)
+	{
+		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="+label+
+				"&state="+state+"&per_page=50&page="+page;
+		urlString = urlString.replaceAll(" ", "%20");
+		System.out.println(urlString);
+		return findWordInLinkHeader(urlString, "rel=\"prev\"");	
 	}
 	
 	public static Map<String, Vector<String>> parseLabelsNames(IssuesLabel[] labels) {

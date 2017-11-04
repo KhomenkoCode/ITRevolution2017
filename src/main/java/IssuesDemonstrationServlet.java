@@ -26,15 +26,17 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 		Issue[] pageOfIssues = null;
 
 		request.setAttribute("page", page);
+
+		if (page == null)
+			page = "1";
+
 		
-		if(page==null || page=="1")
-		{
-			pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, "1", "all");
-		}
-		else{
-			pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all");
-		}
-			
+		pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all");
+		
+		request.setAttribute("hasNext", GithubAPI.hasNextPage(project, choosedLabel, page, "all"));
+		request.setAttribute("hasPrev", GithubAPI.hasPrevPage(project, choosedLabel, page, "all"));
+		
+		
 		
 		request.setAttribute("project", project);
 		request.setAttribute("label", choosedLabel);

@@ -8,6 +8,17 @@
 <title>Issues</title>
 </head>
 <body>
+<c:if test="${hasNext == true}">
+<a href="issues?project=${project}&label=${label}&page=${page+1}">
+Next
+</a>
+</c:if>
+<c:if test="${hasPrev == true}">
+<a href="issues?project=${project}&label=${label}&page=${page-1}">Prev
+</a>
+</c:if>
+
+<br>
 	<c:forEach var="issue" items="${issues}">
 		 ${issue.getTitle()} <br>
 	</c:forEach>
