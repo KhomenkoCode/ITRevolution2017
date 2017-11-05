@@ -25,6 +25,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		if (request.getParameter("project") == null) {
 			response.sendRedirect("index");
 			return;
@@ -76,6 +77,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
 			} else {
 				// Show Types
+				
 				request.setAttribute("NumOfTypesIssuesList", getListOfIssuesNumberInType(project, labels, labelsByTypeMap));
 				request.setAttribute("typeLabels", labelsByTypeMap);
 			}

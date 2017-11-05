@@ -186,7 +186,7 @@ public abstract class GithubAPI {
 		HttpURLConnection conn;
 		BufferedReader rd;
 
-		int issuesPerPage = 30;
+		int issuesPerPage = 1;
 		int numOfIssues = 0;
 		try {
 			String header;
@@ -204,23 +204,12 @@ public abstract class GithubAPI {
 				if (header.contains("rel=\"last\"")) {
 					String lastPageUrl = getLastLink(conn);
 					int index = lastPageUrl.lastIndexOf("page=") + 5;
-					System.out.println(lastPageUrl);
 					page = Integer.parseInt(lastPageUrl.substring(index, lastPageUrl.length()));
 				}
-				numOfIssues += issuesPerPage*(page-1);
+				numOfIssues += issuesPerPage*(page);
 
 			}
-			urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
-					+ "&per_page=" + issuesPerPage + "&page=" + page;
-			urlString = urlString.replaceAll(" ", "%20");
-			url = new URL(urlString);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-			IssuesLabel[] labels = gson.fromJson(rd.readLine(), IssuesLabel[].class);
-			rd.close();
-			numOfIssues += labels.length;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
