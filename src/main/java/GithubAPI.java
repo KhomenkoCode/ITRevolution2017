@@ -107,7 +107,6 @@ public abstract class GithubAPI {
 			if (header.lastIndexOf(word) != -1)
 				return true;
 		return false;
-
 	}
 
 	public static boolean hasNextPage(String project, String label, String page, String state) {
@@ -134,15 +133,15 @@ public abstract class GithubAPI {
 			if (labels[i] != null) {
 				labelType = labels[i].getName();
 				Vector<String> Subtypes = new Vector<>();
-				int lastindexOf—olon = labelType.lastIndexOf(":");
+				int lastIndexOfColon = labelType.lastIndexOf(":");
 
-				if (lastindexOf—olon != -1) {
+				if (lastIndexOfColon != -1) {
 					for (int j = 0; j < labels.length; j++)
 						if (labels[j] != null)
-							if (labels[j].getName().lastIndexOf(labelType.substring(0, lastindexOf—olon)) != -1)
+							if (labels[j].getName().lastIndexOf(labelType.substring(0, lastIndexOfColon)) != -1)
 								Subtypes.add(labels[j].getName()
-										.substring(lastindexOf—olon + 1, labels[j].name.length()).trim());
-					result.put(labelType.substring(0, lastindexOf—olon), Subtypes);
+										.substring(lastIndexOfColon + 1, labels[j].name.length()).trim());
+					result.put(labelType.substring(0, lastIndexOfColon), Subtypes);
 				} else
 					result.put(labelType, null);
 
