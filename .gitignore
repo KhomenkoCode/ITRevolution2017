@@ -96,3 +96,5 @@ local.properties
 .scala_dependencies
 .worksheet
 /.idea
+/.settings
+/ITRevolution2017.iml
