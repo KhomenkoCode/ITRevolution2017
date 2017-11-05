@@ -25,12 +25,12 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		if (request.getParameter("project") == null) {
+		String project = request.getParameter("project");
+		if (project == null ) {
 			response.sendRedirect("index");
 			return;
 		} else {
-			String project = request.getParameter("project");
+			
 			IssuesLabel[] labels = GithubAPI.getAllLabels(project);
 			Map<String, Vector<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
 

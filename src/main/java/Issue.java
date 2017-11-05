@@ -13,59 +13,53 @@ import java.util.TimeZone;
 import com.google.gson.annotations.SerializedName;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Issue {
-	@SerializedName("number")
-	String number;
-	@SerializedName("comments_url")
-	String comments_url;
-	@SerializedName("user")
-	User user;
+    @SerializedName("number")
+    String number;
+    @SerializedName("comments_url")
+    String comments_url;
+    @SerializedName("user")
+    User user;
+    @SerializedName("pull_request")
+    PullRequest pullRequest;
+    @SerializedName("labels")
+    IssuesLabel[] labels;
+    @SerializedName("state")
+    String state;
+    @SerializedName("created_at")
+    String created_at;
+    @SerializedName("updated_at")
+    String updated_at;
+    @SerializedName("closed_at")
+    String closed_at;
+    @SerializedName("title")
+    String title;
+    @SerializedName("body")
+    String body;
+    private Date updated_at_date;
+    private Date created_at_date;
+    private Date closed_at_date;
+    private boolean isValidIssue = true;
 
-	@SerializedName("labels")
-	IssuesLabel[] labels;
-	
-	@SerializedName("state")
-	String state;
-	@SerializedName("created_at")
-	String created_at;
-	@SerializedName("updated_at")
-	String updated_at;
-	@SerializedName("closed_at")
-	String closed_at;
-	@SerializedName("title")
-	String title;
-	@SerializedName("body")
-	String body;
+    int daysBetween;
+    long minutesBetween;
 
-	private Date created_at_date;
-	private Date updated_at_date;
-	private Date closed_at_date;
-	public int daysBetween;
-	public boolean isProblemOccurred = false;
+    Issue(String created_at, String closed_at) {
+        this.created_at = created_at;
+        this.closed_at = closed_at;
+        this.isValidIssue= true;
+    }
 
-	
-	
 
-	
-	void calculateTime() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-		format.setTimeZone(TimeZone.getTimeZone("UTC"));
-		try {
-			this.created_at_date = format.parse(this.created_at);
-			this.closed_at_date = format.parse(this.closed_at);
+    boolean isValidIssue() {
+        return isValidIssue;
+    }
 
-		} catch (ParseException e) {
-			this.isProblemOccurred = true;
-			e.printStackTrace();
-		}
-		// Be careful with UTC and Local time; For UTC it mightn't have happened
-		// Also I cast to int, i don't think it takes more than 2147483647 days
-		// to close an issue
-		this.daysBetween = (int) DAYS.between(
-				this.created_at_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-				this.closed_at_date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-	}
+    void setValidIssue(boolean validIssue) {
+        isValidIssue = validIssue;
+    }
 
 	public IssuesLabel[] getLabels() {
 		return labels;
@@ -152,4 +146,32 @@ public class Issue {
 	public void setBody(String body) {
 		this.body = body;
 	}
+	
+	void calculateTime(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            this.created_at_date = format.parse(this.created_at);
+            this.closed_at_date = format.parse(this.closed_at);
+
+        } catch (ParseException e) {
+            this.isValidIssue = false;
+            e.printStackTrace();
+        }
+        //Be careful with UTC and Local time; For UTC it mightn't have happened
+        // Also I cast to int, i don't think it takes more than 2147483647 days to close an issue
+        this.daysBetween = (int) DAYS.between(this.created_at_date
+                        .toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate(),
+                this.closed_at_date
+                        .toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate());
+
+        this.minutesBetween = MINUTES.between(this.created_at_date
+                        .toInstant(),
+                this.closed_at_date
+                        .toInstant());
+    }
 }

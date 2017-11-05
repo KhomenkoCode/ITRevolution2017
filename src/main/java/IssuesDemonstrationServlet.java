@@ -47,6 +47,9 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 		request.setAttribute("label", choosedLabel);
 		request.setAttribute("issues", pageOfIssues);
 		response.setContentType("text/html");
+		
+		
+		
 		RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/IssuesInfo.jsp");
 		dispatcher.forward(request, response);
 	}
