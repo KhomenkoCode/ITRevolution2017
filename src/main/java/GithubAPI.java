@@ -122,7 +122,7 @@ public abstract class GithubAPI {
 		String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
 				+ "&per_page=50&page=" + page;
 		urlString = urlString.replaceAll(" ", "%20");
-		System.out.println(urlString);
+
 		return findWordInLinkHeader(urlString, "rel=\"prev\"");
 	}
 
@@ -178,5 +178,73 @@ public abstract class GithubAPI {
 		}
 
 		return gson.fromJson(sb.toString(), Issue.class);
+	}
+
+	public static int getNumOfIssuesInLabel(String project, String label, String state) {
+		Gson gson = new Gson();
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+
+		int issuesPerPage = 30;
+		int numOfIssues = 0;
+		try {
+			String header;
+			int page = 1;
+			String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
+					+ "&per_page=" + issuesPerPage + "&page=" + page;
+			urlString = urlString.replaceAll(" ", "%20");
+			url = new URL(urlString);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+
+			header = conn.getHeaderField("Link");
+			if (header != null) {
+
+				if (header.contains("rel=\"last\"")) {
+					String lastPageUrl = getLastLink(conn);
+					int index = lastPageUrl.lastIndexOf("page=") + 5;
+					System.out.println(lastPageUrl);
+					page = Integer.parseInt(lastPageUrl.substring(index, lastPageUrl.length()));
+				}
+				numOfIssues += issuesPerPage*(page-1);
+
+			}
+			urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + label + "&state=" + state
+					+ "&per_page=" + issuesPerPage + "&page=" + page;
+			urlString = urlString.replaceAll(" ", "%20");
+			url = new URL(urlString);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			IssuesLabel[] labels = gson.fromJson(rd.readLine(), IssuesLabel[].class);
+			rd.close();
+			numOfIssues += labels.length;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		return numOfIssues;
+	}
+
+	static private String getLastLink(HttpURLConnection connection) {
+		String link = connection.getHeaderField("Link"); // <http://foobar&gt;;
+															// rel="next",
+															// <http://blah/&gt;;
+															// rel=last /
+		if (link != null) {
+			String[] links = link.split(",");
+			for (String l : links) { // <http://foobar&gt;; rel="next" /
+				if (l.contains("rel=\"last\"")) {
+					String[] tmp1 = l.split("<", 2);
+					if (tmp1.length == 2) {
+						return tmp1[1].split(">", 2)[0]; // http://foobar /
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

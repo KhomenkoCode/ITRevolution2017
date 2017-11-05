@@ -1,8 +1,7 @@
 package main.java;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
 
@@ -71,11 +70,16 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 					return;
 				}
 
+				// Show Subtypes
+				request.setAttribute("NumOfSubtypesIssuesList", getListOfIssuesNumberInSubtype(project, labels, labelsByTypeMap, choosedType));
 				request.setAttribute("choosedType", choosedType);
 				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
-			} else
+			} else {
+				// Show Types
+				request.setAttribute("NumOfTypesIssuesList", getListOfIssuesNumberInType(project, labels, labelsByTypeMap));
 				request.setAttribute("typeLabels", labelsByTypeMap);
-
+			}
+			
 			response.setContentType("text/html");
 			RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/LabelsInfo.jsp");
 			dispatcher.forward(request, response);
@@ -86,6 +90,36 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+
+	private ArrayList<Integer> getListOfIssuesNumberInType(String project, IssuesLabel[] labels,
+			Map<String, Vector<String>> labelsByTypeMap) {
+
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		for (Map.Entry<String, Vector<String>> entry : labelsByTypeMap.entrySet()) {
+			int tmpNumber = 0;
+			for (int i = 0; i < labels.length; i++)
+				if (labels[i].getName().contains(entry.getKey()))
+					tmpNumber += GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all");
+			resultList.add(tmpNumber);
+		}
+
+		return resultList;
+	}
+
+	private ArrayList<Integer> getListOfIssuesNumberInSubtype(String project, IssuesLabel[] labels,
+			Map<String, Vector<String>> labelsByTypeMap, String choosedType) {
+
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		Vector<String> subtypeVector = labelsByTypeMap.get(choosedType);
+		for (String entry : subtypeVector) {
+			int tmpNumber = 0;
+			for (int i = 0; i < labels.length; i++)
+				if (labels[i].getName().contains(entry) && labels[i].getName().contains(choosedType))
+					resultList.add(GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all"));
+		}
+
+		return resultList;
 	}
 
 }
