@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="utf-8"%>
 <%--
   Created by IntelliJ IDEA.
   User: Daniel Nikulin/Nikita Khomenko
@@ -11,7 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <%--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">--%>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Title</title>
 	<link rel="stylesheet" href="<c:url value="/static/styles/stars.css"/>" type="text/css">
@@ -38,10 +37,26 @@
     	</c:otherwise>
 	</c:choose>
 
-<%-- BEGIN DF and FI info an Contributors--%>
+<%-- BEGIN FI and DF info an Contributors--%>
+    <div>
+        Our ratio based on <c:out value="${mapFIResults['amount']}"/> issues which we gladly scanned. <br>
+        FI Ratio: <c:out value="${mapFIResults['ratio']}"/><br>
+        Usually it takes <c:out value="${mapFIResults['average']}"/> days yo integrate feature to this repository.<br>
+        We omit repos that were closed in less than 15 minutes.<br>
+        Fastest issue (enhancement,feature) was closed in <c:out value="${mapFIResults['min']}"/> <br>
+        Longest issue (enhancement,feature) was closed in <c:out value="${mapFIResults['max']}"/> <br>
 
+    </div>
 
+    <div>
+        Our ratio based on <c:out value="${mapDFResults['amount']}"/> issues which we gladly scanned. <br>
+        DF Ratio: <c:out value="${mapDFResults['ratio']}"/><br>
+        Usually it takes <c:out value="${mapDFResults['average']}"/> days yo integrate feature to this repository.<br>
+        We omit repos that were closed in less than 25 minutes.<br>
+        Fastest issue (bug,defect) was closed in <c:out value="${mapDFResults['min']}"/> <br>
+        Longest issue (bug,defect) was closed in <c:out value="${mapDFResults['max']}"/> <br>
 
+    </div>
 
 <%--END DF and FI info an Contributors--%>
 
