@@ -225,7 +225,7 @@ public abstract class GithubAPI {
 				}
 				numOfIssues += issuesPerPage * (page);
 			} else {
-				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 				if (rd.readLine() != null)
 					numOfIssues = 1;
 			}
@@ -409,7 +409,7 @@ public abstract class GithubAPI {
 	static private void getFromConn(StringBuilder sb, HttpURLConnection conn)
 			throws IOException, FileNotFoundException {
 
-		try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+		try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"))) {
 			String line;
 			if ((line = rd.readLine()) != null) {
 				sb.append(line.substring(1, line.length() - 1));
@@ -534,7 +534,7 @@ public abstract class GithubAPI {
 
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 
 			line = rd.readLine();
 
