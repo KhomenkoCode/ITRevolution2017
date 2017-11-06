@@ -85,6 +85,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
             //END LABEL LOGIC
 
             //BEGIN FI,DF,Contributors LOGIC
+
             //FI
             request.setAttribute("mapFIResults",Calculations.calculateFI(project,accessToken));
             HashMap<String,String> map;
@@ -102,12 +103,16 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
 
             //BEGIN REVIEW LOGIC
+
             //Evaluate Average
             Reviews.evaluateAverageRating(project);
             request.setAttribute("reviews", Reviews.projects.get(project));
             request.setAttribute("average_rating_on_reviews", Reviews.getAverageRating(project));
             //END REVIEW LOGIC
+
             response.setContentType("text/html; charset=UTF-8");
+
+			response.setContentType("text/html");
 			RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/LabelsInfo.jsp");
 			dispatcher.forward(request, response);
 		}//END OF ELSE
