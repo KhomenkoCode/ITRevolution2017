@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,13 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		if (request.getParameter("project") == null || request.getParameter("label") == null){
+		Cookie[] cookies = request.getCookies();
+		String accessToken = null;
+		for(int i=0;i<cookies.length;i++)
+			if(cookies[i].getName().equals("github_access_token"))
+				accessToken = cookies[i].getValue();
+		
+		if (request.getParameter("project") == null || request.getParameter("label") == null || accessToken == null){
 			response.sendRedirect("index");
 			return;
 		}
@@ -36,10 +43,10 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 			page = "1";
 
 		request.setAttribute("page", page);
-		pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all");
+		pageOfIssues = GithubAPI.getPageOfIssues(project, choosedLabel, page, "all",accessToken);
 		
-		request.setAttribute("hasNext", GithubAPI.hasNextPage(project, choosedLabel, page, "all"));
-		request.setAttribute("hasPrev", GithubAPI.hasPrevPage(project, choosedLabel, page, "all"));
+		request.setAttribute("hasNext", GithubAPI.hasNextPage(project, choosedLabel, page, "all",accessToken));
+		request.setAttribute("hasPrev", GithubAPI.hasPrevPage(project, choosedLabel, page, "all",accessToken));
 		
 		
 		

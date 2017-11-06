@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,12 +27,18 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String project = request.getParameter("project");
-		if (project == null ) {
+		Cookie[] cookies = request.getCookies();
+		String accessToken = null;
+		for(int i=0;i<cookies.length;i++)
+			if(cookies[i].getName().equals("github_access_token"))
+				accessToken = cookies[i].getValue();
+				
+		if (project == null || accessToken == null) {
 			response.sendRedirect("index");
 			return;
 		} else {
 			
-			IssuesLabel[] labels = GithubAPI.getAllLabels(project);
+			IssuesLabel[] labels = GithubAPI.getAllLabels(project,accessToken);
 			Map<String, Vector<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
 
 			request.setAttribute("project", request.getParameter("project"));
@@ -72,13 +79,13 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 				}
 
 				// Show Subtypes
-				request.setAttribute("NumOfSubtypesIssuesList", getListOfIssuesNumberInSubtype(project, labels, labelsByTypeMap, choosedType));
+				request.setAttribute("NumOfSubtypesIssuesList", getListOfIssuesNumberInSubtype(project, labels, labelsByTypeMap, choosedType, accessToken));
 				request.setAttribute("choosedType", choosedType);
 				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
 			} else {
 				// Show Types
 				
-				request.setAttribute("NumOfTypesIssuesList", getListOfIssuesNumberInType(project, labels, labelsByTypeMap));
+				request.setAttribute("NumOfTypesIssuesList", getListOfIssuesNumberInType(project, labels, labelsByTypeMap,accessToken));
 				request.setAttribute("typeLabels", labelsByTypeMap);
 			}
 			
@@ -95,14 +102,14 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 	}
 
 	private ArrayList<Integer> getListOfIssuesNumberInType(String project, IssuesLabel[] labels,
-			Map<String, Vector<String>> labelsByTypeMap) {
+			Map<String, Vector<String>> labelsByTypeMap, String accessToken) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
 		for (Map.Entry<String, Vector<String>> entry : labelsByTypeMap.entrySet()) {
 			int tmpNumber = 0;
 			for (int i = 0; i < labels.length; i++)
 				if (labels[i].getName().contains(entry.getKey()))
-					tmpNumber += GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all");
+					tmpNumber += GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all", accessToken);
 			resultList.add(tmpNumber);
 		}
 
@@ -110,7 +117,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 	}
 
 	private ArrayList<Integer> getListOfIssuesNumberInSubtype(String project, IssuesLabel[] labels,
-			Map<String, Vector<String>> labelsByTypeMap, String choosedType) {
+			Map<String, Vector<String>> labelsByTypeMap, String choosedType, String accessToken) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
 		Vector<String> subtypeVector = labelsByTypeMap.get(choosedType);
@@ -118,7 +125,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 			int tmpNumber = 0;
 			for (int i = 0; i < labels.length; i++)
 				if (labels[i].getName().contains(entry) && labels[i].getName().contains(choosedType))
-					resultList.add(GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all"));
+					resultList.add(GithubAPI.getNumOfIssuesInLabel(project, labels[i].getName(), "all", accessToken));
 		}
 
 		return resultList;
