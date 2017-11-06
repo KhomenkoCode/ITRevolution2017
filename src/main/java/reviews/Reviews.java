@@ -21,7 +21,11 @@ public class Reviews {
         for (Review rev:reviews) {
             sum += rev.givenRating;
         }
-        averageRating = sum/reviews.size();
+        if (reviews.isEmpty()){
+
+            averageRating = sum;
+        }
+        else averageRating = sum/reviews.size();
     }
     public static class Review{
         String nameField;
