@@ -34,7 +34,7 @@ public class ReviewsServlet extends HttpServlet {
         String textField = request.getParameter("review_text");
         String name = request.getParameter("name");
         int givenRating = Integer.parseInt(request.getParameter("star"));
-        if((!Objects.equals(textField, "")) && (!Objects.equals(name, "")) && (givenRating <5 && givenRating>1)){
+        if((!Objects.equals(textField, "")) && (!Objects.equals(name, "")) && (givenRating <=5 && givenRating>=1)){
             Reviews.reviews.add(new Reviews.Review(name,textField,givenRating));
 
         }
