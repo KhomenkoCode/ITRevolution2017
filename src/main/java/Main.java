@@ -12,21 +12,18 @@ public class Main {
         HashMap<String,String> map;
         System.out.println("Hello World!");
         String repo =  "facebook/react";
-        int a = Integer.parseInt("");
 
-
+        HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442),"myaccesstoken" );
         
-        HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442));
-        
-        System.out.println(GithubAPI.isProjectExist(repo));
-        System.out.println(GithubAPI.isLabelExist(repo,"bug"));
+        System.out.println(GithubAPI.isProjectExist(repo,"myaccesstoken"));
+        System.out.println(GithubAPI.isLabelExist(repo,"Resolution: Need More Information","myaccesstoken"));
 
-        map = Calculations.calculateFI(repo);
+        map = Calculations.calculateFI(repo,"myaccesstoken");
 
         for (Map.Entry entry : map.entrySet()) {
             System.out.println(entry.getKey() + ", " + entry.getValue());
         }
-        map = Calculations.calculateDF(repo);
+        map = Calculations.calculateDF(repo,"myaccesstoken");
 
         for (Map.Entry entry : map.entrySet()) {
             System.out.println(entry.getKey() + ", " + entry.getValue());
