@@ -12,6 +12,8 @@ import java.util.Vector;
 import com.google.gson.Gson;
 
 public abstract class GithubAPI {
+	private static final String clientID = "737d83576351a46442c7";
+	private static final String clientSecret = "436307c777c140fcda1b53e12847d2b34bd58360";
 
 	static IssuesLabel[] getAllLabels(String project) {
 		Gson gson = new Gson();
@@ -63,10 +65,9 @@ public abstract class GithubAPI {
 
 		try {
 			// issues?labels=Type:%20bug&state=all&per_page=100
-			String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + java.net.URLEncoder.encode(label, "UTF-8")
-                    + "&state=" + state
-					+ "&per_page=50&page=" + page;
-			System.out.print(urlString);
+			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
+
 			url = new URL(urlString);
 
 			conn = (HttpURLConnection) url.openConnection();
@@ -112,8 +113,8 @@ public abstract class GithubAPI {
 	public static boolean hasNextPage(String project, String label, String page, String state) {
 		String urlString = null;
 		try {
-			urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state
-					+ "&per_page=50&page=" + page;
+			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,8 +127,8 @@ public abstract class GithubAPI {
 	public static boolean hasPrevPage(String project, String label, String page, String state) {
 		String urlString = null;
 		try {
-			urlString = "https://api.github.com/repos/" + project + "/issues?labels=" + java.net.URLEncoder.encode(label, "UTF-8")  + "&state=" + state
-					+ "&per_page=50&page=" + page;
+			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,10 +203,10 @@ public abstract class GithubAPI {
 		try {
 			String header;
 			int page = 1;
-			String urlString = "https://api.github.com/repos/" + project + "/issues?labels=" +
-                    java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state
-					+ "&per_page=" + issuesPerPage + "&page=" + page;
-			//urlString = urlString.replaceAll(" ", "%20");
+			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=" + issuesPerPage
+					+ "&page=" + page;
+			// urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -218,10 +219,10 @@ public abstract class GithubAPI {
 					int index = lastPageUrl.lastIndexOf("page=") + 5;
 					page = Integer.parseInt(lastPageUrl.substring(index, lastPageUrl.length()));
 				}
-				numOfIssues += issuesPerPage*(page);
+				numOfIssues += issuesPerPage * (page);
 
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -230,259 +231,295 @@ public abstract class GithubAPI {
 		return numOfIssues;
 	}
 
-    static boolean isLabelExist(String repo,String label){
-        Gson gson = new Gson();
-        String jsonString = null;
-        try {
-            jsonString = getJsonStringAllLabels(repo);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-        if ((jsonString == null) || (Objects.equals(jsonString, ""))){
-            return false;
-        }
+	static boolean isLabelExist(String repo, String label) {
+		Gson gson = new Gson();
+		String jsonString = null;
+		try {
+			jsonString = getJsonStringAllLabels(repo);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		if ((jsonString == null) || (Objects.equals(jsonString, ""))) {
+			return false;
+		}
 
-        IssuesLabel[] labels = gson.fromJson(jsonString, IssuesLabel[].class);
-        for (IssuesLabel el:labels) {
-            String lab = el.getName();
-            if (Objects.equals(lab, label)){
-                return true;
-            }
-        }
-        return false;
-    }
+		IssuesLabel[] labels = gson.fromJson(jsonString, IssuesLabel[].class);
+		for (IssuesLabel el : labels) {
+			String lab = el.getName();
+			if (Objects.equals(lab, label)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    static boolean isProjectExist(String repo){
-        StringBuilder sb = new StringBuilder();
-        URL url;
-        HttpURLConnection conn;
-        String jsonString = "";
-        String urlString = "https://api.github.com/repos/" + repo;
-        String name = repo.substring(repo.lastIndexOf("/") + 1);
-        try {
-            url = new URL(urlString);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            getFromConn(sb,conn);
-        } catch (IOException e) {
-            //This also handles 404 error
-            //e.printStackTrace();
-            return false;
-        }
-        if (sb.toString().equals("")){
-            return false;
+	static boolean isProjectExist(String repo) {
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		String jsonString = "";
+		String urlString = "https://api.github.com/repos/" + repo;
+		String name = repo.substring(repo.lastIndexOf("/") + 1);
+		try {
+			url = new URL(urlString);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			getFromConn(sb, conn);
+		} catch (IOException e) {
+			// This also handles 404 error
+			// e.printStackTrace();
+			return false;
+		}
+		if (sb.toString().equals("")) {
+			return false;
 
-        }
-        sb.insert(0,"{");
-        sb.append("}");
-        Gson gson = new Gson();
-        RepoResponse r = gson.fromJson(sb.toString(), RepoResponse.class);
-        return Objects.equals(r.name, name);
-    }
+		}
+		sb.insert(0, "{");
+		sb.append("}");
+		Gson gson = new Gson();
+		RepoResponse r = gson.fromJson(sb.toString(), RepoResponse.class);
+		return Objects.equals(r.name, name);
+	}
 
-    @Deprecated
-    private static String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
+	@Deprecated
+	private static String readAll(Reader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
 
-    static String getJsonStringAllLabels(String project) throws FileNotFoundException{
-        StringBuilder sb = new StringBuilder();
-        URL url;
-        HttpURLConnection conn;
-        try {
-            String header;
-            int page = 1;
-            sb.append("[ ");
-            do {
-                String urlString = "https://api.github.com/repos/" +  project
-                        + "/labels?page=" + page;
-                url = new URL(urlString);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                getFromConn(sb,conn);
-                header = conn.getHeaderField("Link");
-                if (header!=null){
-                    if(header.lastIndexOf("rel=\"next\"") != -1)
-                        sb.append(",");
-                    ++page;
-                }
-            } while (header!=null && header.lastIndexOf("rel=\"next\"") != -1);
+	static String getJsonStringAllLabels(String project) throws FileNotFoundException {
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		try {
+			String header;
+			int page = 1;
+			sb.append("[ ");
+			do {
+				String urlString = "https://api.github.com/repos/" + project + "/labels?page=" + page;
+				url = new URL(urlString);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				getFromConn(sb, conn);
+				header = conn.getHeaderField("Link");
+				if (header != null) {
+					if (header.lastIndexOf("rel=\"next\"") != -1)
+						sb.append(",");
+					++page;
+				}
+			} while (header != null && header.lastIndexOf("rel=\"next\"") != -1);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
-        sb.append(" ]");
+		sb.append(" ]");
 
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 
-    static String requestAPI(String project, String label) throws IOException,FileNotFoundException {
-        StringBuilder sb = new StringBuilder();
-        URL url;
-        HttpURLConnection conn;
-        String jsonString = "";
-        final String PER_PAGE = "100";
-        final String STATE = "closed";
-        String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-                + java.net.URLEncoder.encode(label, "UTF-8")
-                + "&state="+STATE+"&per_page="+PER_PAGE;
-        //urlString = urlString.replaceAll(" ", "%20");
-        url = new URL(urlString);
-        conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        getFromConn(sb,conn);
-        if (getLastLink(conn)!=null && !sb.toString().equals("")){
-            String link= getLastLink(conn);
-            if (link != null) url = new URL(link);
-            else return jsonString;
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            sb.substring(0,sb.length()-2);
-            sb.append(",");
-            StringBuilder lastSb = new StringBuilder ();
-            getFromConn(lastSb,conn);
-            if (!lastSb.toString().equals("")){
-                lastSb.substring(0,lastSb.length());
-            }
-            sb.append(lastSb);
-        }
-        sb.insert(0,"[");
-        sb.append("]");
-        jsonString = sb.toString();
-        return jsonString;
-    }
+	static String requestAPI(String project, String label) throws IOException, FileNotFoundException {
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		String jsonString = "";
+		final String PER_PAGE = "100";
+		final String STATE = "closed";
+		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
+				+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + STATE + "&per_page=" + PER_PAGE;
+		// urlString = urlString.replaceAll(" ", "%20");
+		url = new URL(urlString);
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		getFromConn(sb, conn);
+		if (getLastLink(conn) != null && !sb.toString().equals("")) {
+			String link = getLastLink(conn);
+			if (link != null)
+				url = new URL(link);
+			else
+				return jsonString;
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			sb.substring(0, sb.length() - 2);
+			sb.append(",");
+			StringBuilder lastSb = new StringBuilder();
+			getFromConn(lastSb, conn);
+			if (!lastSb.toString().equals("")) {
+				lastSb.substring(0, lastSb.length());
+			}
+			sb.append(lastSb);
+		}
+		sb.insert(0, "[");
+		sb.append("]");
+		jsonString = sb.toString();
+		return jsonString;
+	}
 
-    static String requestAPIwithoutlabel(String repo) throws IOException ,FileNotFoundException{
-        URL url;
-        HttpURLConnection conn;
-        StringBuilder sb = new StringBuilder("");
-        String jsonString = "";
+	static String requestAPIwithoutlabel(String repo) throws IOException, FileNotFoundException {
+		URL url;
+		HttpURLConnection conn;
+		StringBuilder sb = new StringBuilder("");
+		String jsonString = "";
 
-        final String PER_PAGE = "100";
-        final String STATE = "closed";
+		final String PER_PAGE = "100";
+		final String STATE = "closed";
 
+		url = new URL("https://api.github.com/repos/" + repo + "/issues?state=" + STATE + "&per_page=" + PER_PAGE);
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		String header = conn.getHeaderField("Link");
+		getFromConn(sb, conn);
 
-        url = new URL("https://api.github.com/repos/" + repo
-                + "/issues?state="+STATE+"&per_page="+PER_PAGE);
-        conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        String header = conn.getHeaderField("Link");
-        getFromConn(sb,conn);
+		if (getLastLink(conn) != null && !sb.toString().equals("")) {
+			String link;
+			if ((link = getLastLink(conn)) != null) {
+				url = new URL(link);
+			} else
+				return jsonString;
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			sb.substring(0, sb.length() - 2);
+			sb.append(",");
+			StringBuilder lastSb = new StringBuilder();
+			getFromConn(lastSb, conn);
+			if (!lastSb.toString().equals("")) {
+				lastSb.substring(0, lastSb.length());
+			}
+			sb.append(lastSb);
+		}
+		sb.insert(0, "[");
+		sb.append("]");
+		jsonString = sb.toString();
+		return jsonString;
+	}
 
-        if (getLastLink(conn)!=null && !sb.toString().equals("")){
-            String link;
-            if ((link = getLastLink(conn)) != null) {
-                url = new URL(link);
-            }
-            else return jsonString;
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            sb.substring(0,sb.length()-2);
-            sb.append(",");
-            StringBuilder lastSb = new StringBuilder ();
-            getFromConn(lastSb,conn);
-            if (!lastSb.toString().equals("")){
-                lastSb.substring(0,lastSb.length());
-            }
-            sb.append(lastSb);
-        }
-        sb.insert(0,"[");
-        sb.append("]");
-        jsonString = sb.toString();
-        return jsonString;
-    }
+	static private void getFromConn(StringBuilder sb, HttpURLConnection conn)
+			throws IOException, FileNotFoundException {
 
-    static private void getFromConn(StringBuilder sb, HttpURLConnection conn) throws IOException,FileNotFoundException{
+		try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+			String line;
+			if ((line = rd.readLine()) != null) {
+				sb.append(line.substring(1, line.length() - 1));
+			}
+		} catch (Exception e) {
+			if (e instanceof FileNotFoundException)
+				throw e;
+			e.printStackTrace();
+		}
 
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            String line;
-            if ((line = rd.readLine()) != null) {
-                sb.append(line.substring(1,line.length()-1));
-            }
-        } catch (Exception e) {
-            if(e instanceof FileNotFoundException) throw e;
-            e.printStackTrace();
-        }
+	}
 
-    }
+	static private String getNextLink(HttpURLConnection connection) {
+		String link = connection.getHeaderField("Link"); // <http://foobar&gt;;
+															// rel="next",
+															// <http://blah/&gt;;
+															// rel=last /
+		if (link != null) {
+			String[] links = link.split(",");
+			for (String l : links) { // <http://foobar&gt;; rel="next" /
+				if (l.contains("rel=\"next\"")) {
+					String[] tmp1 = l.split("<", 2);
+					if (tmp1.length == 2) {
+						return tmp1[1].split(">", 2)[0]; // http://foobar /
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    static private String getNextLink(HttpURLConnection connection) {
-        String link = connection.getHeaderField("Link");   // <http://foobar&gt;; rel="next", <http://blah/&gt;; rel=last /
-        if (link != null) {
-            String[] links = link.split(",");
-            for (String l : links) {              // <http://foobar&gt;; rel="next" /
-                if (l.contains("rel=\"next\"")) {
-                    String[] tmp1 = l.split("<", 2);
-                    if (tmp1.length == 2) {
-                        return tmp1[1].split(">", 2)[0];  // http://foobar /
-                    }
-                }
-            }
-        }
-        return null;
-    }
+	static private String getLastLink(HttpURLConnection connection) {
+		String link = connection.getHeaderField("Link"); // <http://foobar&gt;;
+															// rel="next",
+															// <http://blah/&gt;;
+															// rel=last /
+		if (link != null) {
+			String[] links = link.split(",");
+			for (String l : links) { // <http://foobar&gt;; rel="next" /
+				if (l.contains("rel=\"last\"")) {
+					String[] tmp1 = l.split("<", 2);
+					if (tmp1.length == 2) {
+						return tmp1[1].split(">", 2)[0]; // http://foobar /
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    static private String getLastLink(HttpURLConnection connection) {
-        String link = connection.getHeaderField("Link");   // <http://foobar&gt;; rel="next", <http://blah/&gt;; rel=last /
-        if (link != null) {
-            String[] links = link.split(",");
-            for (String l : links) {              // <http://foobar&gt;; rel="next" /
-                if (l.contains("rel=\"last\"")) {
-                    String[] tmp1 = l.split("<", 2);
-                    if (tmp1.length == 2) {
-                        return tmp1[1].split(">", 2)[0];  // http://foobar /
-                    }
-                }
-            }
-        }
-        return null;
-    }
+	/**
+	 * Getting issue from API by using given number
+	 * 
+	 * @param repo
+	 * @param issueNumber
+	 * @return
+	 * @throws IOException
+	 */
+	static String getIssuebyNumberRequest(String repo, String issueNumber) throws IOException {
+		URL url;
+		HttpURLConnection conn;
+		StringBuilder sb = new StringBuilder("");
+		String jsonString = "";
+		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber);
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		// String header = conn.getHeaderField("Link");
+		getFromConn(sb, conn);
+		if (getLastLink(conn) != null && !sb.toString().equals("")) {
+			String link;
+			if ((link = getLastLink(conn)) != null)
+				url = new URL(link);
+			else
+				return jsonString;
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			sb.substring(0, sb.length() - 2);
+			sb.append(",");
+			StringBuilder lastSb = new StringBuilder();
+			getFromConn(lastSb, conn);
+			if (!lastSb.toString().equals("")) {
+				lastSb.substring(0, lastSb.length());
+			}
+			sb.append(lastSb);
+		}
+		sb.insert(0, "{");
+		sb.append("}");
+		jsonString = sb.toString();
+		return jsonString;
+	}
 
+	static String getAccessToken(String tmpCode) {
+		Gson gson = new Gson();
+		StringBuilder sb = new StringBuilder();
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+		String line = "";
 
-    /** Getting issue from API by using given number
-     * @param repo
-     * @param issueNumber
-     * @return
-     * @throws IOException
-     */
-    static String getIssuebyNumberRequest(String repo, String issueNumber) throws IOException {
-        URL url;
-        HttpURLConnection conn;
-        StringBuilder sb = new StringBuilder("");
-        String jsonString = "";
-        url = new URL("https://api.github.com/repos/" + repo
-                + "/issues/"+issueNumber);
-        conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        //String header = conn.getHeaderField("Link");
-        getFromConn(sb,conn);
-        if (getLastLink(conn)!=null && !sb.toString().equals("")){
-            String link;
-            if ((link = getLastLink(conn)) != null) url = new URL(link);
-            else return jsonString;
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            sb.substring(0,sb.length()-2);
-            sb.append(",");
-            StringBuilder lastSb = new StringBuilder ();
-            getFromConn(lastSb,conn);
-            if (!lastSb.toString().equals("")){
-                lastSb.substring(0,lastSb.length()); }
-            sb.append(lastSb);
-        }
-        sb.insert(0,"{");
-        sb.append("}");
-        jsonString = sb.toString();
-        return jsonString;
-    }
+		try {
+			url = new URL("https://github.com/login/oauth/access_token?client_id=" + clientID + "&client_secret="
+					+ clientSecret + "&code=" + tmpCode + "&accept=json");
 
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
+			line = rd.readLine();
+			
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return line;
+	}
 }

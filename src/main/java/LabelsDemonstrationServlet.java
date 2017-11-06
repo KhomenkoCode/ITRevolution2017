@@ -47,7 +47,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 								labelForIssuesPage = labels[i].getName();
 					}
 
-					if (labelForIssuesPage == "")
+					if (labelForIssuesPage.equals(""))
 						response.sendRedirect("index");
 					else
 						response.sendRedirect("issues?project=" + project + "&label=" + labelForIssuesPage);
@@ -64,7 +64,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 								labelForIssuesPage = labels[i].getName();
 					}
 
-					if (labelForIssuesPage == "")
+					if (labelForIssuesPage.equals(""))
 						response.sendRedirect("index");
 					else
 						response.sendRedirect("issues?project=" + project + "&label=" + labelForIssuesPage);
