@@ -102,17 +102,18 @@ abstract class Calculations {
         if (map==null){
             map = baseCalculation(repo,"enhancement",15,accessToken);
         }
-        if (map==null)
-            map = baseCalculationNoLabel(repo);
+        if (map==null) map = baseCalculationNoLabel(repo);
         return map;
     }
     static HashMap<String,String> calculateDF(String repo,String accessToken){
         HashMap<String,String> map = baseCalculation(repo,"bug",25,accessToken);
         if (map==null){
+            map = baseCalculation(repo,"defect",15,accessToken);
+        }
+        if (map==null){
             map = baseCalculation(repo,"problem",15,accessToken);
         }
-        if (map==null)
-            map = baseCalculationNoLabel(repo);
+        if (map==null)map = baseCalculationNoLabel(repo);
         return map;
     }
 
@@ -162,8 +163,8 @@ abstract class Calculations {
         map.put("amount", String.valueOf(basedOnCountIssues));
         map.put("max",String.valueOf(max));
         map.put("min",String.valueOf(min));
-        map.put("average",String.valueOf(average));
-        map.put("ratio",String.valueOf(ratio));
+        map.put("average",String.valueOf((int)average));
+        map.put("ratio",String.valueOf((int)ratio));
         return map;
     }
 
