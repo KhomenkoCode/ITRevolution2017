@@ -13,7 +13,7 @@ public class Main {
         System.out.println("Hello World!");
         String repo =  "facebook/react";
 
-        HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442),"1bb7bf1bc3ef70d77529c1283e9a5acffb2d9cd6" );
+        HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442),"myaccesstoken" );
         
         System.out.println(GithubAPI.isProjectExist(repo,"myaccesstoken"));
         System.out.println(GithubAPI.isLabelExist(repo,"Resolution: Need More Information","myaccesstoken"));
