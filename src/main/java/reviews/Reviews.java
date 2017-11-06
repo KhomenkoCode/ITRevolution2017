@@ -1,31 +1,39 @@
 package main.java.reviews;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Reviews {
-    public static double getAverageRating() {
-        return averageRating;
+
+    static public double getAverageRating(String project) {
+        return averageRating.getOrDefault(project, 0.0);
+    }
+    static HashMap<String, ArrayList<Review>> getProjects() {
+        return projects;
     }
 
-    public static void setAverageRating(double averageRating) {
-        Reviews.averageRating = averageRating;
-    }
+    private static HashMap<String,Double> averageRating = new HashMap<>();
 
-    static double averageRating;
-
-    public static ArrayList<Review> reviews = new ArrayList<>();
+    public static HashMap<String,ArrayList<Review>> projects = new HashMap<>();
+   // public static ArrayList<Review> reviews = new ArrayList<>();
 
 
-    public static void evaluateAverageRating(){
-        double sum = 0.0;
-        for (Review rev:reviews) {
-            sum += rev.givenRating;
+
+    public static void evaluateAverageRating(String project){
+
+        if (!project.isEmpty()) {
+
+            if (projects.containsKey(project)) {
+                double sum = 0.0;
+                for (Review rev:projects.get(project)) {
+                    sum += rev.givenRating;
+                }
+                if (projects.get(project)!=null){
+                    averageRating.put(project, (sum / projects.get(project).size()));
+                }
+            }
+
         }
-        if (reviews.isEmpty()){
-
-            averageRating = sum;
-        }
-        else averageRating = sum/reviews.size();
     }
     public static class Review{
         String nameField;
