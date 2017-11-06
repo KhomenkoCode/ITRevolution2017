@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +20,13 @@ public class IssueReviewServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cookie[] cookies = request.getCookies();
+		String accessToken = null;
+		for(int i=0;i<cookies.length;i++)
+			if(cookies[i].getName().equals("github_access_token"))
+				accessToken = cookies[i].getValue();
 		
-		if (request.getParameter("project") == null || request.getParameter("num") == null){
+		if (request.getParameter("project") == null || request.getParameter("num") == null || accessToken == null){
 			response.sendRedirect("index");
 			return;
 		}
@@ -28,7 +34,7 @@ public class IssueReviewServlet extends HttpServlet {
 		String project = request.getParameter("project");
 		String num = request.getParameter("num");
 		
-		Issue currentIssue = GithubAPI.getSingleIssueByNum(project,num);
+		Issue currentIssue = GithubAPI.getSingleIssueByNum(project,num,accessToken);
 		
 		request.setAttribute("project", project);
 		request.setAttribute("issue", currentIssue);

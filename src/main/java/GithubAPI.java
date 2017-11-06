@@ -15,7 +15,7 @@ public abstract class GithubAPI {
 	private static final String clientID = "737d83576351a46442c7";
 	private static final String clientSecret = "436307c777c140fcda1b53e12847d2b34bd58360";
 
-	static IssuesLabel[] getAllLabels(String project) {
+	static IssuesLabel[] getAllLabels(String project, String accessToken) {
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
 		URL url;
@@ -27,7 +27,7 @@ public abstract class GithubAPI {
 			int page = 1;
 			sb.append("[ ");
 			do {
-				url = new URL("https://api.github.com/repos/" + project + "/labels?page=" + page);
+				url = new URL("https://api.github.com/repos/" + project + "/labels?page=" + page + "&"+accessToken);
 
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -54,7 +54,7 @@ public abstract class GithubAPI {
 		return labels;
 	}
 
-	public static Issue[] getPageOfIssues(String project, String label, String page, String state) {
+	public static Issue[] getPageOfIssues(String project, String label, String page, String state, String accessToken) {
 
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
@@ -66,7 +66,7 @@ public abstract class GithubAPI {
 		try {
 			// issues?labels=Type:%20bug&state=all&per_page=100
 			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
 
 			url = new URL(urlString);
 
@@ -110,11 +110,11 @@ public abstract class GithubAPI {
 		return false;
 	}
 
-	public static boolean hasNextPage(String project, String label, String page, String state) {
+	public static boolean hasNextPage(String project, String label, String page, String state, String accessToken) {
 		String urlString = null;
 		try {
 			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,11 +124,11 @@ public abstract class GithubAPI {
 		return findWordInLinkHeader(urlString, "rel=\"next\"");
 	}
 
-	public static boolean hasPrevPage(String project, String label, String page, String state) {
+	public static boolean hasPrevPage(String project, String label, String page, String state, String accessToken) {
 		String urlString = null;
 		try {
 			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -164,7 +164,7 @@ public abstract class GithubAPI {
 		return result;
 	}
 
-	public static Issue getSingleIssueByNum(String project, String number) {
+	public static Issue getSingleIssueByNum(String project, String number, String accessToken) {
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
 		URL url;
@@ -172,7 +172,7 @@ public abstract class GithubAPI {
 		BufferedReader rd;
 		String line;
 		try {
-			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number;
+			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number+"&"+accessToken;
 			urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 
@@ -192,7 +192,7 @@ public abstract class GithubAPI {
 		return gson.fromJson(sb.toString(), Issue.class);
 	}
 
-	public static int getNumOfIssuesInLabel(String project, String label, String state) {
+	public static int getNumOfIssuesInLabel(String project, String label, String state, String accessToken) {
 		Gson gson = new Gson();
 		URL url;
 		HttpURLConnection conn;
@@ -205,7 +205,7 @@ public abstract class GithubAPI {
 			int page = 1;
 			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
 					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=" + issuesPerPage
-					+ "&page=" + page;
+					+ "&page=" + page+"&"+accessToken;
 			// urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 			conn = (HttpURLConnection) url.openConnection();
@@ -217,7 +217,8 @@ public abstract class GithubAPI {
 				if (header.contains("rel=\"last\"")) {
 					String lastPageUrl = getLastLink(conn);
 					int index = lastPageUrl.lastIndexOf("page=") + 5;
-					page = Integer.parseInt(lastPageUrl.substring(index, lastPageUrl.length()));
+					int index2 = lastPageUrl.lastIndexOf("&access_token");
+					page = Integer.parseInt(lastPageUrl.substring(index, index2));
 				}
 				numOfIssues += issuesPerPage * (page);
 
