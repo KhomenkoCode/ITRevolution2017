@@ -27,7 +27,7 @@ abstract class Calculations {
      *
      * @return map of ratio,max etc.
      */
-    static HashMap<String,String> baseCalculation(String repo,String preferredLabelName, int minutes){
+    private static HashMap<String,String> baseCalculation(String repo, String preferredLabelName, int minutes){
         Gson gson = new Gson();
         String jsonString = null;
         try {
