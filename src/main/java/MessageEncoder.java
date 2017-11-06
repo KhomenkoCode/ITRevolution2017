@@ -7,9 +7,7 @@ import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 import java.util.logging.Logger;
 
-/**
- * Created by Arip Hidayat on 21/02/2016.
- */
+
 public class MessageEncoder implements Encoder.Text<Message> {
     private final Logger log = Logger.getLogger(getClass().getName());
 
