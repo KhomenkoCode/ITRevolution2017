@@ -38,6 +38,8 @@ public abstract class GithubAPI {
 				}
 
 				header = conn.getHeaderField("Link");
+				if (header == null)
+					break;
 				if (header.lastIndexOf("rel=\"next\"") != -1)
 					sb.append(",");
 				++page;
@@ -196,7 +198,6 @@ public abstract class GithubAPI {
 	}
 
 	public static int getNumOfIssuesInLabel(String project, String label, String state, String accessToken) {
-		Gson gson = new Gson();
 		URL url;
 		HttpURLConnection conn;
 		BufferedReader rd;
@@ -216,7 +217,6 @@ public abstract class GithubAPI {
 
 			header = conn.getHeaderField("Link");
 			if (header != null) {
-
 				if (header.contains("rel=\"last\"")) {
 					String lastPageUrl = getLastLink(conn);
 					int index = lastPageUrl.lastIndexOf("page=") + 5;
@@ -224,9 +224,11 @@ public abstract class GithubAPI {
 					page = Integer.parseInt(lastPageUrl.substring(index, index2));
 				}
 				numOfIssues += issuesPerPage * (page);
-
+			} else {
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				if (rd.readLine() != null)
+					numOfIssues = 1;
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -235,11 +237,11 @@ public abstract class GithubAPI {
 		return numOfIssues;
 	}
 
-	static boolean isLabelExist(String repo, String label,String accessToken) {
+	static boolean isLabelExist(String repo, String label, String accessToken) {
 		Gson gson = new Gson();
 		String jsonString = null;
 		try {
-			jsonString = getJsonStringAllLabels(repo,accessToken);
+			jsonString = getJsonStringAllLabels(repo, accessToken);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -258,12 +260,12 @@ public abstract class GithubAPI {
 		return false;
 	}
 
-	static boolean isProjectExist(String repo,String accessToken) {
+	static boolean isProjectExist(String repo, String accessToken) {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
 		String jsonString = "";
-		String urlString = "https://api.github.com/repos/" + repo + "?"+accessToken;
+		String urlString = "https://api.github.com/repos/" + repo + "?" + accessToken;
 		String name = repo.substring(repo.lastIndexOf("/") + 1);
 		try {
 			url = new URL(urlString);
@@ -296,7 +298,7 @@ public abstract class GithubAPI {
 		return sb.toString();
 	}
 
-	static String getJsonStringAllLabels(String project,String accessToken) throws FileNotFoundException {
+	static String getJsonStringAllLabels(String project, String accessToken) throws FileNotFoundException {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
@@ -305,7 +307,8 @@ public abstract class GithubAPI {
 			int page = 1;
 			sb.append("[ ");
 			do {
-				String urlString = "https://api.github.com/repos/" + project + "/labels?page=" + page + "&"+accessToken;
+				String urlString = "https://api.github.com/repos/" + project + "/labels?page=" + page + "&"
+						+ accessToken;
 				url = new URL(urlString);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -465,12 +468,12 @@ public abstract class GithubAPI {
 	 * @return
 	 * @throws IOException
 	 */
-	static String getIssuebyNumberRequest(String repo, String issueNumber,String accessToken) throws IOException {
+	static String getIssuebyNumberRequest(String repo, String issueNumber, String accessToken) throws IOException {
 		URL url;
 		HttpURLConnection conn;
 		StringBuilder sb = new StringBuilder("");
 		String jsonString = "";
-		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber + "&"+accessToken);
+		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber + "&" + accessToken);
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		// String header = conn.getHeaderField("Link");
@@ -499,9 +502,9 @@ public abstract class GithubAPI {
 	}
 
 	static String changeSpecialSymbolsinStringToTheirCodes(String stringToChange) {
-		stringToChange.replaceAll("<", "&lt");
-		stringToChange.replaceAll(">", "&gt");
-		stringToChange.replaceAll("\"", "&quot");
+		stringToChange = stringToChange.replaceAll("<", "&#60;");
+		stringToChange = stringToChange.replaceAll(">", "&#62;");
+		stringToChange = stringToChange.replaceAll("\"", "&#34;");
 		return stringToChange;
 	}
 
@@ -510,13 +513,13 @@ public abstract class GithubAPI {
 		issueToChange.setBody(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getBody()));
 		return issueToChange;
 	}
-	
-	static Issue[]  changeSpecialSymbolsinArrayOfIssues(Issue[] arrayOfIssueToChange) {
-		for(int i=0;i<arrayOfIssueToChange.length;i++)
+
+	static Issue[] changeSpecialSymbolsinArrayOfIssues(Issue[] arrayOfIssueToChange) {
+		for (int i = 0; i < arrayOfIssueToChange.length; i++)
 			arrayOfIssueToChange[i] = changeSpecialSymbolsinIssue(arrayOfIssueToChange[i]);
 		return arrayOfIssueToChange;
 	}
-	
+
 	static String getAccessToken(String tmpCode) {
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
