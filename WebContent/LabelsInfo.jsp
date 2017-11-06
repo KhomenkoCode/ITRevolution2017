@@ -38,9 +38,27 @@
     	</c:otherwise>
 	</c:choose>
 
-<%-- BEGIN DF and FI info an Contributors--%>
 
+<%-- BEGIN FI and DF info an Contributors--%>
+    <div>
+        Our ratio based on <c:out value="${mapFIResults['amount']}"/> issues which we gladly scanned. <br>
+        FI Ratio: <c:out value="${mapFIResults['ratio']}"/><br>
+        Usually it takes <c:out value="${mapFIResults['average']}"/> days yo integrate feature to this repository.<br>
+        We omit repos that were closed in less than 15 minutes.<br>
+        Fastest issue (enhancement,feature) was closed in <c:out value="${mapFIResults['min']}"/> <br>
+        Longest issue (enhancement,feature) was closed in <c:out value="${mapFIResults['max']}"/> <br>
 
+    </div>
+
+    <div>
+        Our ratio based on <c:out value="${mapDFResults['amount']}"/> issues which we gladly scanned. <br>
+        DF Ratio: <c:out value="${mapDFResults['ratio']}"/><br>
+        Usually it takes <c:out value="${mapDFResults['average']}"/> days yo integrate feature to this repository.<br>
+        We omit repos that were closed in less than 25 minutes.<br>
+        Fastest issue (bug,defect) was closed in <c:out value="${mapDFResults['min']}"/> <br>
+        Longest issue (bug,defect) was closed in <c:out value="${mapDFResults['max']}"/> <br>
+
+    </div>
 
 
 <%--END DF and FI info an Contributors--%>

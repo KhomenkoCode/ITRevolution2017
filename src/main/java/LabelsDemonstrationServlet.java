@@ -1,10 +1,7 @@
 package main.java;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,11 +28,14 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 		String project = request.getParameter("project");
 		Cookie[] cookies = request.getCookies();
 		String accessToken = null;
-		for(int i=0;i<cookies.length;i++)
-			if(cookies[i].getName().equals("github_access_token"))
-				accessToken = cookies[i].getValue();
-				
-		if (project == null || accessToken == null) {
+
+        if (cookies!=null) {
+            for(int i=0;i<cookies.length;i++)
+                if(cookies[i].getName().equals("github_access_token"))
+                    accessToken = cookies[i].getValue();
+        }
+
+        if (project == null || accessToken == null) {
 			response.sendRedirect("index");
 		} else {
             IssuesLabel[] labels = GithubAPI.getAllLabels(project,accessToken);
@@ -86,8 +86,21 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
             //BEGIN FI,DF,Contributors LOGIC
 
-
+            //FI
+            request.setAttribute("mapFIResults",Calculations.calculateFI(project,accessToken));
+            HashMap<String,String> map;
+            map = Calculations.calculateFI(project,accessToken);
+            for (Map.Entry entry : map.entrySet()) {
+                System.out.println(entry.getKey() + ", " + entry.getValue());
+            }
+            //DF
+            map = Calculations.calculateDF(project,accessToken);
+            for (Map.Entry entry : map.entrySet()) {
+                System.out.println(entry.getKey() + ", " + entry.getValue());
+            }
+            request.setAttribute("mapDFResults",Calculations.calculateDF(project,accessToken));
             //END FI,DF Contributors LOGIC
+
 
             //BEGIN REVIEW LOGIC
 
@@ -96,6 +109,8 @@ public class LabelsDemonstrationServlet extends HttpServlet {
             request.setAttribute("reviews", Reviews.projects.get(project));
             request.setAttribute("average_rating_on_reviews", Reviews.getAverageRating(project));
             //END REVIEW LOGIC
+
+            response.setContentType("text/html; charset=UTF-8");
 
 			response.setContentType("text/html");
 			RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/LabelsInfo.jsp");
