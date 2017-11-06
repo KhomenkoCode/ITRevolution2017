@@ -31,7 +31,7 @@ public abstract class GithubAPI {
 
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
-				rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 
 				if ((line = rd.readLine()) != null) {
 					sb.append(line.substring(1, line.length() - 1));
@@ -75,7 +75,7 @@ public abstract class GithubAPI {
 
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 
 			if ((line = rd.readLine()) != null) {
 				sb.append(line);
@@ -183,7 +183,7 @@ public abstract class GithubAPI {
 
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 
 			if ((line = rd.readLine()) != null) {
 				sb.append(line);
