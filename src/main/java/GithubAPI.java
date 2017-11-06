@@ -232,11 +232,11 @@ public abstract class GithubAPI {
 		return numOfIssues;
 	}
 
-	static boolean isLabelExist(String repo, String label) {
+	static boolean isLabelExist(String repo, String label,String accessToken) {
 		Gson gson = new Gson();
 		String jsonString = null;
 		try {
-			jsonString = getJsonStringAllLabels(repo);
+			jsonString = getJsonStringAllLabels(repo,accessToken);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return false;
@@ -255,12 +255,12 @@ public abstract class GithubAPI {
 		return false;
 	}
 
-	static boolean isProjectExist(String repo) {
+	static boolean isProjectExist(String repo,String accessToken) {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
 		String jsonString = "";
-		String urlString = "https://api.github.com/repos/" + repo;
+		String urlString = "https://api.github.com/repos/" + repo + "?"+accessToken;
 		String name = repo.substring(repo.lastIndexOf("/") + 1);
 		try {
 			url = new URL(urlString);
@@ -293,7 +293,7 @@ public abstract class GithubAPI {
 		return sb.toString();
 	}
 
-	static String getJsonStringAllLabels(String project) throws FileNotFoundException {
+	static String getJsonStringAllLabels(String project,String accessToken) throws FileNotFoundException {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
@@ -302,7 +302,7 @@ public abstract class GithubAPI {
 			int page = 1;
 			sb.append("[ ");
 			do {
-				String urlString = "https://api.github.com/repos/" + project + "/labels?page=" + page;
+				String urlString = "https://api.github.com/repos/" + project + "/labels?page=" + page + "&"+accessToken;
 				url = new URL(urlString);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -462,12 +462,12 @@ public abstract class GithubAPI {
 	 * @return
 	 * @throws IOException
 	 */
-	static String getIssuebyNumberRequest(String repo, String issueNumber) throws IOException {
+	static String getIssuebyNumberRequest(String repo, String issueNumber,String accessToken) throws IOException {
 		URL url;
 		HttpURLConnection conn;
 		StringBuilder sb = new StringBuilder("");
 		String jsonString = "";
-		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber);
+		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber + "&"+accessToken);
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		// String header = conn.getHeaderField("Link");

@@ -27,11 +27,11 @@ abstract class Calculations {
      *
      * @return map of ratio,max etc.
      */
-    private static HashMap<String,String> baseCalculation(String repo, String preferredLabelName, int minutes){
+    private static HashMap<String,String> baseCalculation(String repo, String preferredLabelName, int minutes,String accessToken){
         Gson gson = new Gson();
         String jsonString = null;
         try {
-            jsonString = GithubAPI.getJsonStringAllLabels(repo);
+            jsonString = GithubAPI.getJsonStringAllLabels(repo,accessToken);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -97,19 +97,19 @@ abstract class Calculations {
 
         return map;
     }
-    static HashMap<String,String> calculateFI(String repo){
-        HashMap<String,String> map = baseCalculation(repo,"feature",15);
+    static HashMap<String,String> calculateFI(String repo,String accessToken){
+        HashMap<String,String> map = baseCalculation(repo,"feature",15,accessToken);
         if (map==null){
-            map = baseCalculation(repo,"enhancement",15);
+            map = baseCalculation(repo,"enhancement",15,accessToken);
         }
         if (map==null)
             map = baseCalculationNoLabel(repo);
         return map;
     }
-    static HashMap<String,String> calculateDF(String repo){
-        HashMap<String,String> map = baseCalculation(repo,"bug",25);
+    static HashMap<String,String> calculateDF(String repo,String accessToken){
+        HashMap<String,String> map = baseCalculation(repo,"bug",25,accessToken);
         if (map==null){
-            map = baseCalculation(repo,"problem",15);
+            map = baseCalculation(repo,"problem",15,accessToken);
         }
         if (map==null)
             map = baseCalculationNoLabel(repo);
@@ -135,7 +135,6 @@ abstract class Calculations {
             return null;
         }
         Issue[] issues = gson.fromJson(jsonString, Issue[].class);
-        Issue i = new Issue("dwd","ddw");
         for (Issue el:issues) {
             el.setValidIssue(true);
             el.calculateTime();
@@ -180,7 +179,7 @@ abstract class Calculations {
      * @return found as a result we return HashMap with Key - string (pr or issue)
      * and Value - array of all (related,relevant) mentioned links.
      */
-   static HashMap<String,ArrayList<String>> findRelevantPRandIssue(String repo,String issueNumber){
+   static HashMap<String,ArrayList<String>> findRelevantPRandIssue(String repo,String issueNumber,String acceessToken){
        final Pattern urlPattern = Pattern.compile(
                "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
                        + "(([\\w\\-]+\\.){1,}?([\\w\\-~]+\\/?)*"
@@ -193,7 +192,7 @@ abstract class Calculations {
         Gson gson = new Gson();
         String jsonString = "";
         try {
-            jsonString = GithubAPI.getIssuebyNumberRequest(repo,issueNumber);
+            jsonString = GithubAPI.getIssuebyNumberRequest(repo,issueNumber,acceessToken);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
