@@ -27,7 +27,7 @@ public abstract class GithubAPI {
 			int page = 1;
 			sb.append("[ ");
 			do {
-				url = new URL("https://api.github.com/repos/" + project + "/labels?page=" + page + "&"+accessToken);
+				url = new URL("https://api.github.com/repos/" + project + "/labels?page=" + page + "&" + accessToken);
 
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
@@ -66,7 +66,8 @@ public abstract class GithubAPI {
 		try {
 			// issues?labels=Type:%20bug&state=all&per_page=100
 			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page + "&"
+					+ accessToken;
 
 			url = new URL(urlString);
 
@@ -114,7 +115,8 @@ public abstract class GithubAPI {
 		String urlString = null;
 		try {
 			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page + "&"
+					+ accessToken;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,7 +130,8 @@ public abstract class GithubAPI {
 		String urlString = null;
 		try {
 			urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page+"&"+accessToken;
+					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=50&page=" + page + "&"
+					+ accessToken;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,7 +175,7 @@ public abstract class GithubAPI {
 		BufferedReader rd;
 		String line;
 		try {
-			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number+"&"+accessToken;
+			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number + "&" + accessToken;
 			urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 
@@ -205,7 +208,7 @@ public abstract class GithubAPI {
 			int page = 1;
 			String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
 					+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + state + "&per_page=" + issuesPerPage
-					+ "&page=" + page+"&"+accessToken;
+					+ "&page=" + page + "&" + accessToken;
 			// urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 			conn = (HttpURLConnection) url.openConnection();
@@ -495,6 +498,25 @@ public abstract class GithubAPI {
 		return jsonString;
 	}
 
+	static String changeSpecialSymbolsinStringToTheirCodes(String stringToChange) {
+		stringToChange.replaceAll("<", "&lt");
+		stringToChange.replaceAll(">", "&gt");
+		stringToChange.replaceAll("\"", "&quot");
+		return stringToChange;
+	}
+
+	static Issue changeSpecialSymbolsinIssue(Issue issueToChange) {
+		issueToChange.setTitle(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getTitle()));
+		issueToChange.setBody(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getBody()));
+		return issueToChange;
+	}
+	
+	static Issue[]  changeSpecialSymbolsinArrayOfIssues(Issue[] arrayOfIssueToChange) {
+		for(int i=0;i<arrayOfIssueToChange.length;i++)
+			arrayOfIssueToChange[i] = changeSpecialSymbolsinIssue(arrayOfIssueToChange[i]);
+		return arrayOfIssueToChange;
+	}
+	
 	static String getAccessToken(String tmpCode) {
 		Gson gson = new Gson();
 		StringBuilder sb = new StringBuilder();
@@ -512,7 +534,6 @@ public abstract class GithubAPI {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 			line = rd.readLine();
-			
 
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block

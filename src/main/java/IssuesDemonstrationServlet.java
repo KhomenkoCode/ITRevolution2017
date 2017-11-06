@@ -52,7 +52,7 @@ public class IssuesDemonstrationServlet extends HttpServlet {
 		
 		request.setAttribute("project", project);
 		request.setAttribute("label", choosedLabel);
-		request.setAttribute("issues", pageOfIssues);
+		request.setAttribute("issues", GithubAPI.changeSpecialSymbolsinArrayOfIssues(pageOfIssues));
 		response.setContentType("text/html");
 		
 		

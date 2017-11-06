@@ -37,7 +37,7 @@ public class IssueReviewServlet extends HttpServlet {
 		Issue currentIssue = GithubAPI.getSingleIssueByNum(project,num,accessToken);
 		
 		request.setAttribute("project", project);
-		request.setAttribute("issue", currentIssue);
+		request.setAttribute("issue", GithubAPI.changeSpecialSymbolsinIssue(currentIssue));
 		response.setContentType("text/html");
 		RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/SingleIssueReview.jsp");
 		dispatcher.forward(request, response);
