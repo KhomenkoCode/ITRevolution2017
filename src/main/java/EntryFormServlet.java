@@ -44,8 +44,16 @@ public class EntryFormServlet extends HttpServlet {
 		String projectUrl = (String) request.getParameter("project");
 		int lastIndexOfGithubCom = projectUrl.lastIndexOf("github.com/");
 		if (lastIndexOfGithubCom == -1) {
+            Cookie[] cookies = request.getCookies();
+            String accessToken = null;
+            for(int i=0;i<cookies.length;i++)
+                if(cookies[i].getName().equals("github_access_token"))
+                    accessToken = cookies[i].getValue();
 			request.setAttribute("WrongUrlMessage", "Wrong URL! URL Must contain \"github.com/\"");
-			doGet(request, response);
+            request.setAttribute("code", accessToken);
+            response.setContentType("text/html");
+            RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/EntryForm.jsp");
+            dispatcher.forward(request, response);
 		} else {
 			String projectCuttedUrl = projectUrl.substring(lastIndexOfGithubCom + 11, projectUrl.length());
 			if (projectCuttedUrl.trim().charAt(projectCuttedUrl.length() - 1) == '/')
