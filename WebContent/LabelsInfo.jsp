@@ -36,8 +36,8 @@
 
 
 		<table>
-		<tr style="vertical-align: top; ">
-		<td style="width:40%;">
+		<tr style="vertical-align: top;">
+		<td style="width:35%;">
 		<h3>Issues type:</h3> <br>
 		<c:choose>
 			<c:when test="${empty choosedType}">
@@ -54,8 +54,8 @@
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
-
-
+				<h4>"${choosedType}" subtypes:</h4>
+				
 				<c:forEach var="numOfelem" begin="0"
 					end="${NumOfSubtypesIssuesList.size()-1}" step="2">
 				
@@ -72,40 +72,62 @@
 		</c:choose>
 		</td>
 		
-		<td style="vertical-align: top">
+		<td style="vertical-align: top;padding-right:20pt;">
 		<%-- BEGIN FI and DF info an Contributors--%>
-		<div>
-			Our ratio based on
+		<div >
+		<br><br><br>
+			<ul class="list-group">
+  				<li class="list-group-item" style="background-color:#6cf772;border: 1px solid #6cf772;"><h4>FI Ratio: <c:out value="${mapFIResults['ratio']}" />%</h4></li>
+  				<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">Our ratio based on
 			<c:out value="${mapFIResults['amount']}" />
-			issues which we gladly scanned. <br> FI Ratio:
-			<c:out value="${mapFIResults['ratio']}" />
-			<br> Usually it takes
+			issues which we gladly scanned.</li>
+  				<li class="list-group-item"  style="background-color:#6cf7ac;border: 1px solid #6cf772;">Usually it takes
 			<c:out value="${mapFIResults['average']}" />
-			days yo integrate feature to this repository.<br> We omit repos
-			that were closed in less than 15 minutes.<br> Fastest issue
+			days to integrate feature to this repository.</li>
+  				<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">We omit repos
+			that were closed in less than 15 minutes.</li>
+			<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">
+			 Fastest issue
 			(enhancement,feature) was closed in
 			<c:out value="${mapFIResults['min']}" />
-			<br> Longest issue (enhancement,feature) was closed in
-			<c:out value="${mapFIResults['max']}" />
+			</li>
+  				<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">Longest issue (enhancement,feature) was closed in
+			<c:out value="${mapFIResults['max']}" /></li>
+			</ul>
+			 <br> 
+			<br> <br> 
+			<br> 
 			<br>
 
 		</div>
 		</td>
 		
+		
+		
+		
 		<td style="vertical-align: top">
 		<div>
-			Our ratio based on
+		<br><br><br>
+		<ul class="list-group">
+  <li class="list-group-item" style="background-color:#38c8e2;border: 1px solid #38c8e2;"><h4>DF Ratio:
+			<c:out value="${mapDFResults['ratio']}" />%</h4></li>
+  <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Our ratio based on
 			<c:out value="${mapDFResults['amount']}" />
-			issues which we gladly scanned. <br> DF Ratio:
-			<c:out value="${mapDFResults['ratio']}" />
-			<br> Usually it takes
+			issues which we gladly scanned.</li>
+  <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Usually it takes
 			<c:out value="${mapDFResults['average']}" />
-			days yo integrate feature to this repository.<br> We omit repos
-			that were closed in less than 25 minutes.<br> Fastest issue
+			days yo integrate feature to this repository.</li>
+  <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">We omit repos
+			that were closed in less than 25 minutes.  </li>
+  <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Fastest issue
 			(bug,defect) was closed in
-			<c:out value="${mapDFResults['min']}" />
-			<br> Longest issue (bug,defect) was closed in
-			<c:out value="${mapDFResults['max']}" />
+			<c:out value="${mapDFResults['min']}"/></li>
+  <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Longest issue (bug,defect) was closed in
+			<c:out value="${mapDFResults['max']}" /></li>
+</ul>
+			 <br> 
+			<br> <br> 
+			<br> 
 			<br>
 
 		</div>
