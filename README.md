@@ -1,6 +1,6 @@
 # IT Revolution Test Web Project
 
-PROJECT AVILIABLE ON **HEROKU** [Github Issue Browser](https://itrevolution2017.herokuapp.com/)
+**PROJECT AVILIABLE ON **HEROKU** [Github Issue Browser](https://itrevolution2017.herokuapp.com/)**
 ### Made by [Nikita Khomenko](https://github.com/KhomenkoCode) and  [Daniil Nikulin](https://github.com/ddci)
 
 ----------
