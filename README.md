@@ -31,11 +31,11 @@ But before you run use ```mvn clean install```
 **2** Выбираем сервер и нажимает Add and Remove 
 
 **3** Добавляем сервер в "конфигуриуемые"  
-![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview")
+![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_2.jpg "Preview")
 
  **4**Нажимаем пуск 
  
- ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview")  
+ ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_3.jpg "Preview")  
 
 ----------
 
