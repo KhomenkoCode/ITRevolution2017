@@ -13,7 +13,8 @@
 <body>
 ${WrongUrlMessage}
 <c:if test="${not empty example}" ><br>
-	<a href="/labels?project=facebook/react" >Example github.com/facebook/react</a>
+	<%--<a href="/labels?project=facebook/react" >Example github.com/facebook/react</a>--%>
+    Example github.com/facebook/react
 </c:if>
 			<c:choose>
 				<c:when test="${empty code}">
