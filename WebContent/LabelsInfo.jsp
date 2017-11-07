@@ -52,6 +52,8 @@
 				
 				<br>
 				</c:forEach>
+				
+				<c:if test="${NumOfTypesIssuesList.size()==0}"> <h3>Sorry, nothing in there</h3></c:if>
 			</c:when>
 			<c:otherwise>
 				<h4>"${choosedType}" subtypes:</h4>
@@ -63,11 +65,11 @@
  						<a style="text-decoration: none; color: white;">${NumOfSubtypesIssuesList.get(numOfelem)}&nbsp;&nbsp;</a> 
  						<span class="badge">${NumOfSubtypesIssuesList.get(numOfelem+1)}</span>
 					</button>
-				
+					
 				<br>
 				</c:forEach>
 				
-
+				<c:if test="${NumOfSubtypesIssuesList.size()==0}"> <h4>Sorry, nothing in there</h4></c:if>
 			</c:otherwise>
 		</c:choose>
 		</td>
@@ -89,10 +91,10 @@
 			<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">
 			 Fastest issue
 			(enhancement,feature) was closed in
-			<c:out value="${mapFIResults['min']}" />
+			<c:out value="${mapFIResults['min']}" /> days
 			</li>
   				<li class="list-group-item" style="background-color:#6cf7ac;border: 1px solid #6cf772;">Longest issue (enhancement,feature) was closed in
-			<c:out value="${mapFIResults['max']}" /></li>
+			<c:out value="${mapFIResults['max']}" /> days</li>
 			</ul>
 			 <br> 
 			<br> <br> 
@@ -121,9 +123,9 @@
 			that were closed in less than 25 minutes.  </li>
   <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Fastest issue
 			(bug,defect) was closed in
-			<c:out value="${mapDFResults['min']}"/></li>
+			<c:out value="${mapDFResults['min']}"/> days</li>
   <li class="list-group-item" style="background-color:#38e2dc;border: 1px solid #38c8e2;">Longest issue (bug,defect) was closed in
-			<c:out value="${mapDFResults['max']}" /></li>
+			<c:out value="${mapDFResults['max']}" /> days</li>
 </ul>
 			 <br> 
 			<br> <br> 
