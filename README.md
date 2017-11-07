@@ -1,10 +1,12 @@
-# ITRev_Web_Test_Project
-Realisation of test project
+# IT Revolution Test Web Project
 
+Realisation of test web project  
+### Made by [Nikita Khomenko](https://github.com/KhomenkoCode) and  [Daniil Nikulin](https://github.com/ddci)
 
 ----------
 **Option 1:** To run this project you need to install Tomcat and deploy given WAR file into it and run Tomcan 
-Folder path to put WAR file ***apache-tomcat-8.?.??/webapps/ITRevolution2017***
+Folder path to put WAR file ***apache-tomcat-8.?.??/webapps/ITRevolution2017***  
+Then open [localhost:8080/ITRevolution2017/](http://lcalhost:8080/ITRevolution2017/)
 
 
 ----------
@@ -17,19 +19,23 @@ Your IntelliJ IDEA IDE Run Configuration should look like this:
 ![alt text](https://raw.githubusercontent.com/ddci/ITRev_Web_Test_Project/master/img/Idea_2.JPG "Preview")
 
 
-But before you run use **mvn clean install**
+But before you run use ```mvn clean install```
 
 
 ----------
 **Option3:** Almost the same for **Eclipse**:  
-**1** Переходим в перспективу "Java EE" или добавляем отображение установленных серверов eclipse  
-![alt text]
-(https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview")
-**2** Ыыбираем сервер и нажимает Add and Remove  
+**1** Переходим в перспективу "Java EE" или добавляем отображение установленных серверов eclipse 
+
+![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview") 
+
+**2** Выбираем сервер и нажимает Add and Remove 
+
 **3** Добавляем сервер в "конфигуриуемые"  
-(https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_2.jpg "Preview")
-**4**Нажимаем пуск  
-(https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_3.jpg "Preview")
+![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview")
+
+ **4**Нажимаем пуск 
+ 
+ ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview")  
 
 ----------
 
