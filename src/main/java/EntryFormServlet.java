@@ -50,7 +50,7 @@ public class EntryFormServlet extends HttpServlet {
                 if(cookies[i].getName().equals("github_access_token"))
                     accessToken = cookies[i].getValue();
 			request.setAttribute("WrongUrlMessage", "Wrong URL! URL must contain \"github.com/\"");
-            //request.setAttribute("example", "github.com/facebook/react");
+            request.setAttribute("example", "github.com/facebook/react");
             request.setAttribute("code", accessToken);
             response.setContentType("text/html");
             RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/EntryForm.jsp");
