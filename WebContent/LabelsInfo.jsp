@@ -14,27 +14,26 @@
     <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Title</title>
-	<link rel="stylesheet" href="<c:url value="/static/styles/stars.css"/>" type="text/css">
-	<link rel="stylesheet" href="<c:url value="/static/styles/formval.css"/>" type="text/css">
+	<link rel="stylesheet" href="<c:url value="/static/css/stars.css"/>" type="text/css">
+	<link rel="stylesheet" href="<c:url value="/static/css/formval.css"/>" type="text/css">
 </head>
 <body>
 	<c:choose>
     	<c:when test="${empty choosedType}">
-			<c:forEach var="type" items="${typeLabels}">
-   				<a href="labels?project=${project}&type=${type.key}">${type.key}</a><br>
-			</c:forEach>
-			<br><br>
-			<c:forEach var="numOfIssues" items="${NumOfTypesIssuesList}">
-   				${numOfIssues}<br>
+			<c:forEach var="numOfelem" begin="0" end="${NumOfTypesIssuesList.size()-1}" step="2">
+				${NumOfTypesIssuesList.get(numOfelem)}
+				${NumOfTypesIssuesList.get(numOfelem+1)}
+				<br>
 			</c:forEach>
 		</c:when>
     	<c:otherwise>
-    		<c:forEach var="subtype" items="${subtypeLabels}">
-    			<a href="labels?project=${project}&type=${choosedType}&subtype=${subtype}">${subtype}</a><br>
+    	
+    	<c:forEach var="numOfelem" begin="0" end="${NumOfSubtypesIssuesList.size()-1}" step="2">
+				${NumOfTypesIssuesList.get(numOfelem)}
+				${NumOfTypesIssuesList.get(numOfelem+1)}
+				<br>
 			</c:forEach>
-			<c:forEach var="numOfIssues" items="${NumOfSubtypesIssuesList}">
-   				${numOfIssues}<br>
-			</c:forEach>
+    		
     	</c:otherwise>
 	</c:choose>
 
