@@ -44,7 +44,7 @@
 		
 		<c:forEach var="issue" items="${issues}">
 
-			<div class="alert alert-success" role="alert" style="margin-bottom:10pt;">
+			<div class="alert alert-info" role="alert" style="margin-bottom:10pt;">
 			<a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a> Labels:
 			<br> Labels: 
 		<c:forEach var="label" items="${issue.getLabels()}">
