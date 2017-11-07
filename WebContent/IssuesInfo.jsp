@@ -29,25 +29,43 @@
 
 	<div class="container">
 		<c:if test="${hasPrev == true}">
-			<a href="issues?project=${project}&label=${label}&page=${page-1}">Prev
-			</a>
+			
+			<button onclick="location.href = 'issues?project=${project}&label=${label}&page=${page-1}'" class="btn btn-primary" type="button" style="margin-bottom:5pt;">
+				&larr; Prev
+			</button>
 		</c:if>
 		<c:if test="${hasNext == true}">
-			<a href="issues?project=${project}&label=${label}&page=${page+1}">
-				Next </a>
+			<button onclick="location.href = 'issues?project=${project}&label=${label}&page=${page+1}'" class="btn btn-primary" type="button" style="margin-bottom:5pt;">
+				 Next &rarr;
+			</button>
 		</c:if>
 		<br>
 		
 		
 		<c:forEach var="issue" items="${issues}">
-		<div style="margin-bottom:10pt;">
+
+			<div class="alert alert-success" role="alert" style="margin-bottom:10pt;">
 			<a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a> Labels:
 			<br> Labels: 
 		<c:forEach var="label" items="${issue.getLabels()}">
 			<a href="issues?project=facebook/react&label=${label.getName()}"><span class="label label-info">${label.getName()}</span></a>
 		</c:forEach>
 			</div>
+
 		</c:forEach>
+		
+		
+		<c:if test="${hasPrev == true}">
+			
+			<button onclick="location.href = 'issues?project=${project}&label=${label}&page=${page-1}'" class="btn btn-primary" type="button" style="margin-bottom:5pt;">
+				&larr; Prev
+			</button>
+		</c:if>
+		<c:if test="${hasNext == true}">
+			<button onclick="location.href = 'issues?project=${project}&label=${label}&page=${page+1}'" class="btn btn-primary" type="button" style="margin-bottom:5pt;">
+				 Next &rarr;
+			</button>
+		</c:if>
 		
 	</div>
 </body>
