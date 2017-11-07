@@ -228,25 +228,68 @@ abstract class Calculations {
                 //System.out.println(sub);
                 if(sub.contains("/pull/")){
                     if(prsArray.isEmpty()) prsArray.add(sub.substring(sub.lastIndexOf("/pull/")+6));
+                    String add = null;
                     for (String s:prsArray) {
                         if(!s.contains(sub.substring(sub.lastIndexOf("/pull/")+6))) {
-                            String add = sub.substring(sub.lastIndexOf("/pull/")+6);
-                            prsArray.add(add);//here
+                            add = sub.substring(sub.lastIndexOf("/pull/")+6);
                         }
+                    }
+                    if(add != null){
+                        prsArray.add(add);
                     }
                 }
                 if(sub.contains("/issues/")){
                     if(issuesArray.isEmpty()) issuesArray.add(sub.substring(sub.lastIndexOf("/issues/")+8));
+                    String add = null;
                     for (String s:issuesArray) {
-                        if(!s.contains(sub.substring(sub.lastIndexOf("/issues/")+8))){
-
-                            String add = sub.substring(sub.lastIndexOf("/issues/")+8);
-                            issuesArray.add(add);//here
+                        if(!s.contains(sub.substring(sub.lastIndexOf("/issues/")+8))) {
+                            add = sub.substring(sub.lastIndexOf("/issues/")+8);
                         }
+                    }
+                    if(add != null){
+                        issuesArray.add(add);
                     }
                 }
             }
         }
+
+       if (prsArray.size()!=0) {
+           for (int i = 0; i < prsArray.size(); i++) {
+               String str = prsArray.get(i);
+               if (str.contains("/")) {
+                   int firstIndex = str.indexOf("/");
+                   if (firstIndex != -1 && firstIndex != 0) {
+                       prsArray.set(i,str.substring(0, firstIndex));
+                   }
+               }
+               if (str.contains(")")) {
+                   int firstIndex = str.indexOf(")");
+                   if (firstIndex != -1 && firstIndex != 0) {
+                       prsArray.set(i,str.substring(0, firstIndex));
+                   }
+               }
+           }
+           found.put("pull_requests",prsArray);
+       }
+
+       if (issuesArray.size()!=0) {
+           for (int i = 0; i < issuesArray.size(); i++) {
+               String str = issuesArray.get(i);
+               if (str.contains("/")) {
+                   int firstIndex = str.indexOf("/");
+                   if (firstIndex != -1 && firstIndex != 0) {
+                       issuesArray.set(i,str.substring(0, firstIndex));
+                   }
+               }
+               if (str.contains(")")) {
+                   int firstIndex = str.indexOf(")");
+                   if (firstIndex != -1 && firstIndex != 0) {
+                       issuesArray.set(i,str.substring(0, firstIndex));
+                   }
+               }
+           }
+           found.put("issues",issuesArray);
+       }
         if (prsArray.size()!=0) found.put("pull_requests",prsArray);
         if (issuesArray.size()!=0) found.put("issues",issuesArray);
         if(!found.isEmpty()) return found;
