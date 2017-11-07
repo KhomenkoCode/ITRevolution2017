@@ -52,7 +52,7 @@ abstract class Calculations {
             return null;
         }
         try {
-            jsonString = GithubAPI.requestAPI(repo,bugLabels.get(0).getName());
+            jsonString = GithubAPI.requestAPI(repo,bugLabels.get(0).getName(),accessToken);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -78,42 +78,52 @@ abstract class Calculations {
             }
         }
         //Calculate ratio using our formula
-        int basedOnCountIssues = validIssues.size();
-        double sumOfAll = validIssues.stream().reduce(0, (a, b) -> a + b);
-        int max = Collections.max(validIssues);
-        int min = Collections.min(validIssues);
-        double average = sumOfAll/basedOnCountIssues;
-        //Ratio
-        double percentage = ((average-min) * 100) / (max-min);
-        double ratio = 100-percentage;
+        HashMap<String,String> map = null;
+        if (validIssues.size()!=0) {
+            int basedOnCountIssues = validIssues.size();
+            double sumOfAll = validIssues.stream().reduce(0, (a, b) -> a + b);
+            int max = Collections.max(validIssues);
+            int min = Collections.min(validIssues);
+            double average = sumOfAll/basedOnCountIssues;
+            //Ratio
+            double percentage = ((average-min) * 100) / (max-min);
+            double ratio = 100-percentage;
 
 
-        HashMap<String,String> map = new HashMap<>();
-        map.put("amount", String.valueOf(basedOnCountIssues));
-        map.put("max",String.valueOf(max));
-        map.put("min",String.valueOf(min));
-        map.put("average",String.valueOf(average));
-        map.put("ratio",String.valueOf(ratio));
-
+            map = new HashMap<>();
+            map.put("amount", String.valueOf(basedOnCountIssues));
+            map.put("max",String.valueOf(max));
+            map.put("min",String.valueOf(min));
+            map.put("average",String.valueOf((int)average));
+            if (sumOfAll==0) map.put("ratio",String.valueOf((100)));
+            else map.put("ratio",String.valueOf((int)ratio));
+        }
         return map;
     }
     static HashMap<String,String> calculateFI(String repo,String accessToken){
         HashMap<String,String> map = baseCalculation(repo,"feature",15,accessToken);
         if (map==null){
+            System.out.println("enchancment");
             map = baseCalculation(repo,"enhancement",15,accessToken);
         }
-        if (map==null) map = baseCalculationNoLabel(repo);
+        if (map==null) {
+            map = baseCalculationNoLabel(repo,accessToken);
+        System.out.println("base calculation");}
         return map;
     }
     static HashMap<String,String> calculateDF(String repo,String accessToken){
         HashMap<String,String> map = baseCalculation(repo,"bug",25,accessToken);
         if (map==null){
             map = baseCalculation(repo,"defect",15,accessToken);
+            System.out.println("bug");
         }
         if (map==null){
             map = baseCalculation(repo,"problem",15,accessToken);
+            System.out.println("problem");
         }
-        if (map==null)map = baseCalculationNoLabel(repo);
+        if (map==null){
+            map = baseCalculationNoLabel(repo,accessToken);
+            System.out.println("base calculation");}
         return map;
     }
 
@@ -121,11 +131,11 @@ abstract class Calculations {
 
 
     
-    private static HashMap<String,String> baseCalculationNoLabel(String repo){
+    private static HashMap<String,String> baseCalculationNoLabel(String repo,String accessToken){
         Gson gson = new Gson();
         String jsonString = "";
         try {
-            jsonString = GithubAPI.requestAPIwithoutlabel(repo);
+            jsonString = GithubAPI.requestAPIwithoutlabel(repo,accessToken);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -139,9 +149,6 @@ abstract class Calculations {
         for (Issue el:issues) {
             el.setValidIssue(true);
             el.calculateTime();
-            if(el.isValidIssue()){
-                if(el.minutesBetween<=15) el.setValidIssue(false);
-            }
         }
         ArrayList<Integer> validIssues =  new ArrayList<>();
 
@@ -151,20 +158,25 @@ abstract class Calculations {
             }
         }
         //Calculate ratio using our formula
-        int basedOnCountIssues = validIssues.size();
-        double sumOfAll = validIssues.stream().reduce(0, (a, b) -> a + b);
-        int max = Collections.max(validIssues);
-        int min = Collections.min(validIssues);
-        double average = sumOfAll/basedOnCountIssues;
-        //Ratio
-        double percentage = ((average-min) * 100) / (max-min);
-        double ratio = 100-percentage;
-        HashMap<String,String> map = new HashMap<>();
-        map.put("amount", String.valueOf(basedOnCountIssues));
-        map.put("max",String.valueOf(max));
-        map.put("min",String.valueOf(min));
-        map.put("average",String.valueOf((int)average));
-        map.put("ratio",String.valueOf((int)ratio));
+
+        HashMap<String,String> map = null;
+        if (validIssues.size()!=0) {
+            int basedOnCountIssues = validIssues.size();
+            int sumOfAll = validIssues.stream().reduce(0, (a, b) -> a + b);
+            int max = Collections.max(validIssues);
+            int min = Collections.min(validIssues);
+            double average = sumOfAll/basedOnCountIssues;
+            //Ratio
+            double percentage = ((average-min) * 100) / (max-min);
+            double ratio = 100-percentage;
+            map = new HashMap<>();
+            map.put("amount", String.valueOf(basedOnCountIssues));
+            map.put("max",String.valueOf(max));
+            map.put("min",String.valueOf(min));
+            map.put("average",String.valueOf((int)average));
+            if (sumOfAll==0) map.put("ratio",String.valueOf((100)));
+            else map.put("ratio",String.valueOf((int)ratio));
+        }
         return map;
     }
 
