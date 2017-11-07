@@ -5,7 +5,8 @@ Realisation of test web project
 
 ----------
 **Option 1:** To run this project you need to install Tomcat and deploy given WAR file into it and run Tomcan 
-Folder path to put WAR file ***apache-tomcat-8.?.??/webapps/ITRevolution2017***
+Folder path to put WAR file ***apache-tomcat-8.?.??/webapps/ITRevolution2017***  
+Then open [localhost:8080/ITRevolution2017/](http://lcalhost:8080/ITRevolution2017/)
 
 
 ----------
