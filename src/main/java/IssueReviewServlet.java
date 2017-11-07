@@ -23,7 +23,9 @@ public class IssueReviewServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+
         //General
+
     	Cookie[] cookies = request.getCookies();
 		String accessToken = null;
 		for(int i=0;i<cookies.length;i++)
@@ -44,6 +46,7 @@ public class IssueReviewServlet extends HttpServlet {
 
 		//BEGIN Relevant Issues and PRs logic
 		HashMap<String,ArrayList<String>> relevant = Calculations.findRelevantPRandIssue(project,num,accessToken);
+
         //Set PR Array
         HashMap<String,ArrayList<String>> prAndIssueMap = Calculations.findRelevantPRandIssue(project,num,accessToken);
 

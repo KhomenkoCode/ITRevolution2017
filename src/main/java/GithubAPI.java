@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
@@ -143,14 +143,14 @@ public abstract class GithubAPI {
 		return findWordInLinkHeader(urlString, "rel=\"prev\"");
 	}
 
-	public static Map<String, Vector<String>> parseLabelsNames(IssuesLabel[] labels) {
-		Map<String, Vector<String>> result = new HashMap<String, Vector<String>>();
+	public static Map<String, ArrayList<String>> parseLabelsNames(IssuesLabel[] labels) {
+		Map<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
 		String labelType;
 		for (int i = 0; i < labels.length; i++) {
 
 			if (labels[i] != null) {
 				labelType = labels[i].getName();
-				Vector<String> Subtypes = new Vector<>();
+				ArrayList<String> Subtypes = new ArrayList<>();
 				int lastIndexOfColon = labelType.lastIndexOf(":");
 
 				if (lastIndexOfColon != -1) {

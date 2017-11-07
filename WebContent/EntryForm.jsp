@@ -61,7 +61,7 @@
 								<div class="input-group">
 									<form method="post">
 										<span class="input-group-btn">
-											<input type="text" name="project" placeholder="github.com/" class="form-control" > 
+											<input type="text" name="project" placeholder="github.com/" class="form-control" style="width: 180%;"> 
 											<input type="submit" class="btn btn-default" value="Submit" >
 										</span>
 									</form>

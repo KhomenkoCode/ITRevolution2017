@@ -20,21 +20,20 @@
 <body>
 	<c:choose>
     	<c:when test="${empty choosedType}">
-			<c:forEach var="type" items="${typeLabels}">
-   				<a href="labels?project=${project}&type=${type.key}">${type.key}</a><br>
-			</c:forEach>
-			<br><br>
-			<c:forEach var="numOfIssues" items="${NumOfTypesIssuesList}">
-   				${numOfIssues}<br>
+			<c:forEach var="numOfelem" begin="0" end="${NumOfTypesIssuesList.size()-1}" step="2">
+				${NumOfTypesIssuesList.get(numOfelem)}
+				${NumOfTypesIssuesList.get(numOfelem+1)}
+				<br>
 			</c:forEach>
 		</c:when>
     	<c:otherwise>
-    		<c:forEach var="subtype" items="${subtypeLabels}">
-    			<a href="labels?project=${project}&type=${choosedType}&subtype=${subtype}">${subtype}</a><br>
+    	
+    	<c:forEach var="numOfelem" begin="0" end="${NumOfSubtypesIssuesList.size()-1}" step="2">
+				${NumOfTypesIssuesList.get(numOfelem)}
+				${NumOfTypesIssuesList.get(numOfelem+1)}
+				<br>
 			</c:forEach>
-			<c:forEach var="numOfIssues" items="${NumOfSubtypesIssuesList}">
-   				${numOfIssues}<br>
-			</c:forEach>
+    		
     	</c:otherwise>
 	</c:choose>
 

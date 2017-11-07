@@ -35,8 +35,7 @@
 	</table>
 	<script src="static/js/script.js"></script>
 
-
-
+    
 <%--BEGIN RLEVANT PR AND ISSUES BLOCK--%>
 <%-- BEGIN PR BLOCK--%>
 	<c:if test="${not empty pull_requests_array}">

@@ -2,6 +2,7 @@ package main.java;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,7 +40,7 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 			response.sendRedirect("index");
 		} else {
             IssuesLabel[] labels = GithubAPI.getAllLabels(project,accessToken);
-			Map<String, Vector<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
+			Map<String, ArrayList<String>> labelsByTypeMap = GithubAPI.parseLabelsNames(labels);
 			request.setAttribute("project", request.getParameter("project"));
 			if (request.getParameter("type") != null) {
 				String choosedType = request.getParameter("type");
@@ -73,14 +74,38 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 					return;
 				}
                 // Show Subtypes
-				request.setAttribute("NumOfSubtypesIssuesList", getListOfIssuesNumberInSubtype(project, labels, labelsByTypeMap, choosedType, accessToken));
+                
+                
+                ArrayList<String> resultSet = new  ArrayList<String>();
+                ArrayList<Integer> ListOfIssuesNumberInSubtype = getListOfIssuesNumberInSubtype(project, labels, labelsByTypeMap, choosedType, accessToken);
+                ArrayList<String> subtypes = labelsByTypeMap.get(choosedType);
+                
+                Iterator<String> it = subtypes.iterator();
+				Iterator<Integer> it2 = ListOfIssuesNumberInSubtype.iterator();
+				while (it.hasNext()) {
+				   
+				    resultSet.add(it.next());
+				    resultSet.add(it2.next().toString());
+				}
+                
+				request.setAttribute("NumOfSubtypesIssuesList", resultSet);
 				request.setAttribute("choosedType", choosedType);
-				request.setAttribute("subtypeLabels", labelsByTypeMap.get(choosedType));
+				//request.setAttribute("subtypeLabels", );
 			} else {
 				// Show Types
+				ArrayList<String> resultSet = new  ArrayList<String>();
+				ArrayList<Integer> numOfIssuesInTypes =	getListOfIssuesNumberInType(project, labels, labelsByTypeMap,accessToken);
 				
-				request.setAttribute("NumOfTypesIssuesList", getListOfIssuesNumberInType(project, labels, labelsByTypeMap,accessToken));
-				request.setAttribute("typeLabels", labelsByTypeMap);
+				Iterator<Entry<String, ArrayList<String>>> it = labelsByTypeMap.entrySet().iterator();
+				Iterator<Integer> it2 = numOfIssuesInTypes.iterator();
+				while (it.hasNext()) {
+				    Entry<String, ArrayList<String>> pair = it.next();
+				   
+				    resultSet.add(pair.getKey());
+				    resultSet.add(it2.next().toString());
+				}
+				request.setAttribute("NumOfTypesIssuesList", resultSet);
+				//request.setAttribute("typeLabels", labelsByTypeMap);
 			}
             //END LABEL LOGIC
 
@@ -128,10 +153,10 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 	}
 
 	private ArrayList<Integer> getListOfIssuesNumberInType(String project, IssuesLabel[] labels,
-			Map<String, Vector<String>> labelsByTypeMap, String accessToken) {
+			Map<String, ArrayList<String>> labelsByTypeMap, String accessToken) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
-		for (Map.Entry<String, Vector<String>> entry : labelsByTypeMap.entrySet()) {
+		for (Map.Entry<String, ArrayList<String>> entry : labelsByTypeMap.entrySet()) {
 			int tmpNumber = 0;
 			for (int i = 0; i < labels.length; i++)
 				if (labels[i].getName().contains(entry.getKey()))
@@ -143,11 +168,11 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 	}
 
 	private ArrayList<Integer> getListOfIssuesNumberInSubtype(String project, IssuesLabel[] labels,
-			Map<String, Vector<String>> labelsByTypeMap, String choosedType, String accessToken) {
+			Map<String, ArrayList<String>> labelsByTypeMap, String choosedType, String accessToken) {
 
 		ArrayList<Integer> resultList = new ArrayList<Integer>();
-		Vector<String> subtypeVector = labelsByTypeMap.get(choosedType);
-		for (String entry : subtypeVector) {
+		ArrayList<String> subtypeArrayList = labelsByTypeMap.get(choosedType);
+		for (String entry : subtypeArrayList) {
 			int tmpNumber = 0;
 			for (int i = 0; i < labels.length; i++)
 				if (labels[i].getName().contains(entry) && labels[i].getName().contains(choosedType))
