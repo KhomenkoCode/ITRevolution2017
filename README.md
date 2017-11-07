@@ -1,4 +1,4 @@
-# ITRev_Web_Test_Project
+# ITRevolution2017 Web Test Task
 Realisation of test project
 
 Made by **Khomenko Nikita** and **Daniil Nikulin**
