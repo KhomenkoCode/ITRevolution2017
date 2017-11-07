@@ -16,10 +16,14 @@
 		<a class="navbar-brand" href="labels?project=${project}">${project}</a>
 		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 
-			<a
-				href="https://github.com/login/oauth/authorize?client_id=737d83576351a46442c7"
+
+			<a href="https://github.com/login/oauth/authorize?client_id=737d83576351a46442c7"
 				style="text-decoration: none; color: white; line-height: 3.7em;">
 				[Change project]</a>
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="labels?project=${project}" style="text-decoration: none; color: white; line-height: 3.7em;">[Project labels]</a>
+				
 		</div>
 	</div>
 
@@ -33,16 +37,18 @@
 				Next </a>
 		</c:if>
 		<br>
+		
+		
 		<c:forEach var="issue" items="${issues}">
+		<div style="margin-bottom:10pt;">
 			<a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a> Labels:
+			<br> Labels: 
 		<c:forEach var="label" items="${issue.getLabels()}">
-			<span class="label label-info">${label.getName()}</span>
+			<a href="issues?project=facebook/react&label=${label.getName()}"><span class="label label-info">${label.getName()}</span></a>
 		</c:forEach>
-
-
-			<br>
+			</div>
 		</c:forEach>
-
+		
 	</div>
 </body>
 </html>
