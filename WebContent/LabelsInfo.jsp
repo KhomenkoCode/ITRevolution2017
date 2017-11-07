@@ -14,8 +14,8 @@
     <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Title</title>
-	<link rel="stylesheet" href="<c:url value="/static/styles/stars.css"/>" type="text/css">
-	<link rel="stylesheet" href="<c:url value="/static/styles/formval.css"/>" type="text/css">
+	<link rel="stylesheet" href="<c:url value="/static/css/stars.css"/>" type="text/css">
+	<link rel="stylesheet" href="<c:url value="/static/css/formval.css"/>" type="text/css">
 </head>
 <body>
 	<c:choose>
