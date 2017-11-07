@@ -13,9 +13,9 @@ public class Main {
         System.out.println("Hello World!");
         String repo =  "ddci/vkfilebot";
 
-        //HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442),"myaccesstoken" );
+        HashMap<String,ArrayList<String>> res = Calculations.findRelevantPRandIssue(repo,String.valueOf(11442),"myaccesstoken" );
         
-        //System.out.println(GithubAPI.isProjectExist(repo,"myaccesstoken"));
+        System.out.println(GithubAPI.isProjectExist(repo,"myaccesstoken"));
         System.out.println(GithubAPI.isLabelExist(repo,"Resolution: Need More Information","myaccesstoken"));
 
         map = Calculations.calculateFI(repo,"myaccesstoken");

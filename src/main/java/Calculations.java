@@ -192,7 +192,7 @@ abstract class Calculations {
      * @return found as a result we return HashMap with Key - string (pr or issue)
      * and Value - array of all (related,relevant) mentioned links.
      */
-   static HashMap<String,ArrayList<String>> findRelevantPRandIssue(String repo,String issueNumber,String acceessToken){
+   static HashMap<String,ArrayList<String>> findRelevantPRandIssue(String repo,String issueNumber,String accessToken){
        final Pattern urlPattern = Pattern.compile(
                "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
                        + "(([\\w\\-]+\\.){1,}?([\\w\\-~]+\\/?)*"
@@ -205,7 +205,7 @@ abstract class Calculations {
         Gson gson = new Gson();
         String jsonString = "";
         try {
-            jsonString = GithubAPI.getIssuebyNumberRequest(repo,issueNumber,acceessToken);
+            jsonString = GithubAPI.getIssuebyNumberRequest(repo,issueNumber,accessToken);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -216,7 +216,8 @@ abstract class Calculations {
         Issue issue = gson.fromJson(jsonString, Issue.class);
         if (issue==null) return null;
         if (issue.pullRequest!=null){
-            prsArray.add(issue.pullRequest.html_url);
+            String sub = issue.pullRequest.html_url.substring(issue.pullRequest.html_url.lastIndexOf("/pull/")+6);
+            prsArray.add(sub);//here
         }
         if(issue.body!=null && !Objects.equals(issue.body, "")){
             Matcher matcher = urlPattern.matcher(issue.body);
@@ -226,17 +227,22 @@ abstract class Calculations {
                 String sub = issue.body.substring(matchStart,matchEnd);
                 //System.out.println(sub);
                 if(sub.contains("/pull/")){
-                    if(prsArray.isEmpty()) prsArray.add(sub);
+                    if(prsArray.isEmpty()) prsArray.add(sub.substring(sub.lastIndexOf("/pull/")+6));
                     for (String s:prsArray) {
-                        if(!s.contains(sub))
-                            prsArray.add(sub);
+                        if(!s.contains(sub.substring(sub.lastIndexOf("/pull/")+6))) {
+                            String add = sub.substring(sub.lastIndexOf("/pull/")+6);
+                            prsArray.add(add);//here
+                        }
                     }
                 }
                 if(sub.contains("/issues/")){
-                    if(issuesArray.isEmpty()) issuesArray.add(sub);
+                    if(issuesArray.isEmpty()) issuesArray.add(sub.substring(sub.lastIndexOf("/issues/")+8));
                     for (String s:issuesArray) {
-                        if(!s.contains(sub))
-                            issuesArray.add(sub);
+                        if(!s.contains(sub.substring(sub.lastIndexOf("/issues/")+8))){
+
+                            String add = sub.substring(sub.lastIndexOf("/issues/")+8);
+                            issuesArray.add(add);//here
+                        }
                     }
                 }
             }
