@@ -1,6 +1,8 @@
 package main.java;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,7 +22,8 @@ public class IssueReviewServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Cookie[] cookies = request.getCookies();
+
+    	Cookie[] cookies = request.getCookies();
 		String accessToken = null;
 		for(int i=0;i<cookies.length;i++)
 			if(cookies[i].getName().equals("github_access_token"))
@@ -33,11 +36,15 @@ public class IssueReviewServlet extends HttpServlet {
 		
 		String project = request.getParameter("project");
 		String num = request.getParameter("num");
-		
+		//Issue view logic
 		Issue currentIssue = GithubAPI.getSingleIssueByNum(project,num,accessToken);
-		
 		request.setAttribute("project", project);
 		request.setAttribute("issue", GithubAPI.changeSpecialSymbolsinIssue(currentIssue));
+
+		//BEGIN Relevant Issues and PRs logic
+		HashMap<String,ArrayList<String>> relevant = Calculations.findRelevantPRandIssue(project,num,accessToken);
+
+        //END Relevant Issues and PRs logic
 		response.setContentType("text/html");
 		RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/SingleIssueReview.jsp");
 		dispatcher.forward(request, response);

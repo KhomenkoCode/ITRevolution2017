@@ -35,7 +35,7 @@
 				<button type="button" onclick="send();">Send</button></td>
 		</tr>
 	</table>
-	<script src="js/script.js"></script>
+	<script src="static/js/script.js"></script>
 
 
 
