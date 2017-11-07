@@ -21,7 +21,6 @@
 				style="text-decoration: none; color: white; line-height: 3.7em;">
 				[Change project]</a>
 				
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="labels?project=${project}" style="text-decoration: none; color: white; line-height: 3.7em;">[Project labels]</a>
 				
 		</div>
@@ -45,7 +44,7 @@
 		<c:forEach var="issue" items="${issues}">
 
 			<div class="alert alert-info" role="alert" style="margin-bottom:10pt;">
-			<a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a> Labels:
+			<a href="issue?project=${project}&num=${issue.getNumber()}">${issue.getTitle()}</a>
 			<br> Labels: 
 		<c:forEach var="label" items="${issue.getLabels()}">
 			<a href="issues?project=facebook/react&label=${label.getName()}"><span class="label label-info">${label.getName()}</span></a>

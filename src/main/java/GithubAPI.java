@@ -177,7 +177,7 @@ public abstract class GithubAPI {
 		BufferedReader rd;
 		String line;
 		try {
-			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number + "&" + accessToken;
+			String urlString = "https://api.github.com/repos/" + project + "/issues/" + number + "?" + accessToken;
 			urlString = urlString.replaceAll(" ", "%20");
 			url = new URL(urlString);
 
@@ -475,7 +475,7 @@ public abstract class GithubAPI {
 		HttpURLConnection conn;
 		StringBuilder sb = new StringBuilder("");
 		String jsonString = "";
-		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber + "&" + accessToken);
+		url = new URL("https://api.github.com/repos/" + repo + "/issues/" + issueNumber + "?" + accessToken);
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		// String header = conn.getHeaderField("Link");
@@ -511,8 +511,11 @@ public abstract class GithubAPI {
 	}
 
 	static Issue changeSpecialSymbolsinIssue(Issue issueToChange) {
-		issueToChange.setTitle(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getTitle()));
-		issueToChange.setBody(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getBody()));
+		if(issueToChange!=null)
+		{	
+			issueToChange.setTitle(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getTitle()));
+			issueToChange.setBody(changeSpecialSymbolsinStringToTheirCodes(issueToChange.getBody()));
+		}
 		return issueToChange;
 	}
 
