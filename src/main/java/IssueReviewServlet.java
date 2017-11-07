@@ -23,6 +23,8 @@ public class IssueReviewServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+
+ 
     	Cookie[] cookies = request.getCookies();
 		String accessToken = null;
 		for(int i=0;i<cookies.length;i++)
@@ -44,7 +46,23 @@ public class IssueReviewServlet extends HttpServlet {
 		//BEGIN Relevant Issues and PRs logic
 		HashMap<String,ArrayList<String>> relevant = Calculations.findRelevantPRandIssue(project,num,accessToken);
 
+        //Set PR Array
+        HashMap<String,ArrayList<String>> prAndIssueMap = Calculations.findRelevantPRandIssue(project,num,accessToken);
+
+        if (prAndIssueMap!=null){
+            if (prAndIssueMap.containsKey("pull_requests"))
+            request.setAttribute("pull_requests_array", prAndIssueMap.get("pull_requests"));
+        }
+        //Set Issues Issues
+        request.setAttribute("issues", GithubAPI.changeSpecialSymbolsinIssue(currentIssue));
+        if (prAndIssueMap!=null){
+            if (prAndIssueMap.containsKey("issues"))
+                request.setAttribute("issues_array", prAndIssueMap.get("issues"));
+        }
         //END Relevant Issues and PRs logic
+
+
+        request.setAttribute("project", project);
 		response.setContentType("text/html");
 		RequestDispatcher dispatcher = (RequestDispatcher) request.getRequestDispatcher("/SingleIssueReview.jsp");
 		dispatcher.forward(request, response);

@@ -8,8 +8,6 @@
 </head>
 <body>
 
-
-
 	<img src="${issue.getUser().getAvatar_url()}" height="50pt">
 	${issue.getUser().getLogin()}; ${issue.getState()}
 	${issue.getCreated_at()}
@@ -37,6 +35,21 @@
 	</table>
 	<script src="static/js/script.js"></script>
 
+
+<%--BEGIN RLEVANT PR AND ISSUES BLOCK--%>
+<%-- BEGIN PR BLOCK--%>
+	<c:if test="${not empty pull_requests_array}">
+        <c:forEach var="pr_el" items="${pull_requests_array}">
+            <a href="issue?project=${project}&num=${pr_el}">#${pr_el}</a><br>
+        </c:forEach>
+    </c:if>
+<%--END PR BLOCK--%>
+    <c:if test="${not empty issues_array}">
+        <c:forEach var="issues_el" items="${issues_array}">
+            <a href="issue?project=${project}&num=${issues_el}">#${issues_el}</a><br>
+        </c:forEach>
+    </c:if>
+<%--END RLEVANT PR AND ISSUES BLOCK--%>
 
 
 </body>
