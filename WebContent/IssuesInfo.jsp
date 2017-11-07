@@ -27,6 +27,8 @@
 	</div>
 
 	<div class="container">
+		<h3>${label}</h3>
+	
 		<c:if test="${hasPrev == true}">
 			
 			<button onclick="location.href = 'issues?project=${project}&label=${label}&page=${page-1}'" class="btn btn-primary" type="button" style="margin-bottom:5pt;">
