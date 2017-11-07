@@ -90,12 +90,9 @@ public class LabelsDemonstrationServlet extends HttpServlet {
             request.setAttribute("mapFIResults",Calculations.calculateFI(project,accessToken));
 			//DF
 			request.setAttribute("mapDFResults",Calculations.calculateDF(project,accessToken));
-
-            //END FI,DF Contributors LOGIC
-
+			//END FI,DF Contributors LOGIC
 
             //BEGIN REVIEW LOGIC
-
             //Evaluate Average
             Reviews.evaluateAverageRating(project);
             request.setAttribute("reviews", Reviews.projects.get(project));
