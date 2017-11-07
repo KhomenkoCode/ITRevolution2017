@@ -126,7 +126,7 @@
 	</c:forEach>
 	<fieldset>
 		<legend>Review</legend>
-		<form method="post">
+		<form method="post" accept-charset="windows-1251">
 			<label for="name">Name</label>
 			<input name="name" id="name" required type="text">
 			<br><br>

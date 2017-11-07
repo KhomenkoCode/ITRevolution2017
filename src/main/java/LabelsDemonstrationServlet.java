@@ -88,17 +88,21 @@ public class LabelsDemonstrationServlet extends HttpServlet {
 
             //FI
             request.setAttribute("mapFIResults",Calculations.calculateFI(project,accessToken));
-            HashMap<String,String> map;
-            map = Calculations.calculateFI(project,accessToken);
-            for (Map.Entry entry : map.entrySet()) {
-                System.out.println(entry.getKey() + ", " + entry.getValue());
-            }
-            //DF
-            map = Calculations.calculateDF(project,accessToken);
-            for (Map.Entry entry : map.entrySet()) {
-                System.out.println(entry.getKey() + ", " + entry.getValue());
-            }
-            request.setAttribute("mapDFResults",Calculations.calculateDF(project,accessToken));
+            HashMap<String,String> map = null;
+//			map = Calculations.calculateFI(project,accessToken);
+//			if (map!=null) {
+//				for (Map.Entry entry : map.entrySet()) {
+//                    System.out.println(entry.getKey() + ", " + entry.getValue());
+//                }
+//			}
+			//DF
+//			map = Calculations.calculateDF(project,accessToken);
+//			if (map!=null) {
+//				for (Map.Entry entry : map.entrySet()) {
+//                    System.out.println(entry.getKey() + ", " + entry.getValue());
+//                }
+//			}
+			request.setAttribute("mapDFResults",Calculations.calculateDF(project,accessToken));
             //END FI,DF Contributors LOGIC
 
 
