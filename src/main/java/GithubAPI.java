@@ -331,7 +331,7 @@ public abstract class GithubAPI {
 		return sb.toString();
 	}
 
-	static String requestAPI(String project, String label) throws IOException, FileNotFoundException {
+	static String requestAPI(String project, String label,String accessToken) throws IOException, FileNotFoundException {
 		StringBuilder sb = new StringBuilder();
 		URL url;
 		HttpURLConnection conn;
@@ -339,7 +339,8 @@ public abstract class GithubAPI {
 		final String PER_PAGE = "100";
 		final String STATE = "closed";
 		String urlString = "https://api.github.com/repos/" + project + "/issues?labels="
-				+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + STATE + "&per_page=" + PER_PAGE;
+				+ java.net.URLEncoder.encode(label, "UTF-8") + "&state=" + STATE + "&per_page=" + PER_PAGE
+				+"&" + accessToken;
 		// urlString = urlString.replaceAll(" ", "%20");
 		url = new URL(urlString);
 		conn = (HttpURLConnection) url.openConnection();
@@ -368,7 +369,7 @@ public abstract class GithubAPI {
 		return jsonString;
 	}
 
-	static String requestAPIwithoutlabel(String repo) throws IOException, FileNotFoundException {
+	static String requestAPIwithoutlabel(String repo,String accessToken) throws IOException, FileNotFoundException {
 		URL url;
 		HttpURLConnection conn;
 		StringBuilder sb = new StringBuilder("");
@@ -377,7 +378,8 @@ public abstract class GithubAPI {
 		final String PER_PAGE = "100";
 		final String STATE = "closed";
 
-		url = new URL("https://api.github.com/repos/" + repo + "/issues?state=" + STATE + "&per_page=" + PER_PAGE);
+		url = new URL("https://api.github.com/repos/" + repo + "/issues?state=" + STATE + "&per_page=" + PER_PAGE
+                +"&" + accessToken);
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		String header = conn.getHeaderField("Link");
