@@ -147,7 +147,8 @@
 		
 		<%--@elvariable id="reviews" type="main.java.reviews.Reviews"--%>
 	<fieldset>
-		<legend>Reviews</legend></fieldset>
+		<legend>Reviews  <span class="label label-info">Average Rating:  ${average_rating_on_reviews}</span> <br> <br>
+			<label for="review_text">Post</label></legend></fieldset>
 		<c:forEach var="review" items="${reviews}">
 		<div class="alert alert-info" role="alert">
 				<table><tr style="vertical-align: middle;">
@@ -225,16 +226,17 @@
 		
 		 
 		<fieldset>
-			<legend>Review</legend>
+			<legend>Have a question? Want to leave a feedback?</legend>
 			<form method="post" accept-charset="utf-8">
-				<label for="name">Name</label> <input name="name" id="name" required
-					type="text"> &nbsp;&nbsp; <span class="label label-info">Average Rating:  ${average_rating_on_reviews}</span> <br> <br> <label for="review_text">Post</label>
-				<textarea name="review_text" class="form-control" rows="5" cols="60"
+				<label for="name">Name</label> <input  class="form-control" name="name" id="name" required
+					type="text"> &nbsp;&nbsp;
+                <label for="review_text">You questions,reviews leve here..</label>
+                <textarea name="review_text" id="review_text" class="form-control" rows="5" cols="60"
 					required></textarea><br> 
 				<table>
 				<tr style="vertical-align: middle;">
 				<td>
-				<div class="stars">
+				<div class="stars" class="form-group" >
 					<input class="star star-5" id="star-5" type="radio" required
 						name="star" value="5" /> <label class="star star-5" for="star-5"></label>
 					<input class="star star-4" id="star-4" type="radio" required
@@ -249,7 +251,7 @@
 				</td>
 				<td>
 				 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				 <input type="submit" value="Submit" />
+				 <input class="btn btn-primary" type="submit" value="Post Review" />
 				</td>
 				</tr>
 				</table>
