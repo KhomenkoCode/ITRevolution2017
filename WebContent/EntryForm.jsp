@@ -4,13 +4,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link href="static/css/bootstrap.min.css" rel="stylesheet">
-<link href="static/css/cover.css" rel="stylesheet">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/cover.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="static/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Github Issue Browser (GiB)</title>
 </head>
 <body>
-
+${WrongUrlMessage}
+<c:if test="${not empty example}" ><br>
+	<%--<a href="/labels?project=facebook/react" >Example github.com/facebook/react</a>--%>
+    Example github.com/facebook/react
+</c:if>
 			<c:choose>
 				<c:when test="${empty code}">
 
@@ -25,9 +30,9 @@
 
 								<div class="inner cover">
 								
-									<h1 class="cover-heading">Cover your page.</h1>
-									<p class="lead">We're going to now talk to the GitHub API.
-										Ready?</p>
+									<h1 class="cover-heading">Github Issue Browser</h1>
+									<p class="lead">Hey, we need to authenticate you through Github.</p>
+									<%--<p class="lead">We really need it,for research purpose obviously.</p>--%>
 									<p class="lead">
 										<a
 											href="https://github.com/login/oauth/authorize?client_id=737d83576351a46442c7"
@@ -55,10 +60,10 @@
 
 
 								<div class="inner cover">
-									<h1 class="cover-heading">Cover your page.</h1>
+									<h1 class="cover-heading">So let's begin!</h1>
 
 
-									<p class="lead">Введите ссылку на репозиторий Github:</p>
+									<p class="lead">Enter an link in the field below to continue.</p>
 
 									<div class="col-lg-6">
 										<div class="input-group">
@@ -82,7 +87,7 @@
 
 					</div>
 
-					<!-- ${WrongUrlMessage}<br>
+					<!-- <br>
 			<form method="post">
 				Введите ссылку на репозиторий Github:<br> <input type="text"
 					name="project" placeholder="github.com/"><br> <br>
