@@ -1,4 +1,4 @@
-# ITRev_Web_Test_Project
+# IT Revolution Test Web Project
 
 Realisation of test web project  
 ### Made by [Nikita Khomenko](https://github.com/KhomenkoCode) and  [Daniil Nikulin](https://github.com/ddci)
