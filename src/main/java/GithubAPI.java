@@ -226,7 +226,7 @@ public abstract class GithubAPI {
 				numOfIssues += issuesPerPage * (page);
 			} else {
 				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-				if (rd.readLine() != null)
+				if (rd.readLine().contains("{"))
 					numOfIssues = 1;
 			}
 		} catch (Exception e) {
