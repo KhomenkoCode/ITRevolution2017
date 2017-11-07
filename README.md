@@ -1,6 +1,7 @@
 # ITRev_Web_Test_Project
-Realisation of test project
 
+Realisation of test web project  
+### Made by [Nikita Khomenko](https://github.com/KhomenkoCode) and  [Daniil Nikulin](https://github.com/ddci)
 
 ----------
 **Option 1:** To run this project you need to install Tomcat and deploy given WAR file into it and run Tomcan 
