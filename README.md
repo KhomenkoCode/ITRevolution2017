@@ -27,16 +27,20 @@ But before you run use ```mvn clean install```
 **1** Переходим в перспективу "Java EE" или добавляем отображение окна установленных в eclipse серверов 
 
 **2** Выбираем сервер и нажимает Add and Remove 
+
 ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_1.jpg "Preview") 
 
 
 **3** Добавляем проект в "конфигурируемые"  
+
 ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_2.jpg "Preview")
 
  **4** Нажимаем "запуск сервера" 
- ![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_3.jpg "Preview")  
 
-**5** Проект будет находиться по адресу "localhost:8080/ITRevolution2017/"
+![alt text](https://raw.githubusercontent.com/KhomenkoCode/ITRevolution2017/master/img/eclipse_3.jpg "Preview")  
+
+ **5** Проект будет находиться по адресу "localhost:8080/ITRevolution2017/"
+
 ----------
 
 
